@@ -30,10 +30,10 @@ const createUser = async (user) => {
 const getUser = async (id) => {
   try {
     const result = await pool.query("SELECT * FROM users where id = $1", [id]);
-    return result.rows[0] || null;
+    return result;
   } catch (error) {
     console.log(error);
-    throw new Error("Error in getUser repository");
+    throw new Error("Something went wrong in db");
   }
 };
 

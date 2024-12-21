@@ -9,7 +9,7 @@ const createUser = async (userData) => {
   }
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(userData.password, salt);
-  const newUser = { ...userData, password: hashedPassword, win_streak: 0 };
+  const newUser = { ...userData, password: hashedPassword };
   user = await userRepository.createUser(newUser);
   return user;
 };
