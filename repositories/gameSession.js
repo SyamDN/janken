@@ -4,8 +4,8 @@ const pool = require("../db/db");
 const createGameSession = async (userId, sessionScore, sessionStreak) => {
   try {
     const result = await pool.query(
-      `INSERT INTO game_sessions (user_id, session_score, session_streak, created_at, ended_at)
-      VALUES ($1, $2, COALESCE($3, 0), NOW(), NOW())
+      `INSERT INTO game_sessions (user_id, session_score, session_streak, created_at)
+      VALUES ($1, $2, COALESCE($3, 0), NOW())
       RETURNING *;`,
       [userId, sessionScore, sessionStreak]
     );
@@ -39,7 +39,25 @@ const getLastGameSession = async (userId) => {
   }
 };
 
+const updateGameSessionEndedAt = async (gameId) => {
+  try {
+    const result = await pool.query(
+      `UPDATE game_sessions
+       SET ended_at = NOW()
+       WHERE game_id = $1
+       RETURNING *;`,
+      [gameId]
+    );
+    console.log("Updated game session:", result.rows[0]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error updating game session ended_at:", error);
+    throw new Error("Error updating game session ended_at");
+  }
+};
+
 module.exports = {
   createGameSession,
   getLastGameSession,
+  updateGameSessionEndedAt,
 };

@@ -8,7 +8,6 @@ const startGameSession = async (req, res) => {
     const computerChoice = generateComputerChoice();
     const result = determineWinner(userChoice, computerChoice);
 
-    // Ambil sesi terakhir user
     const lastGameSession = await gameSessionService.getLastGameSession(userId);
 
     let sessionScore = 0;
@@ -21,7 +20,7 @@ const startGameSession = async (req, res) => {
 
       sessionStreak = lastGameSession
         ? parseInt(lastGameSession.session_streak, 10) + 1
-        : 1; // Tambah streak
+        : 1;
     } else if (result === "draw") {
       sessionScore = lastGameSession
         ? parseInt(lastGameSession.session_score, 10)
@@ -29,21 +28,29 @@ const startGameSession = async (req, res) => {
 
       sessionStreak = lastGameSession
         ? parseInt(lastGameSession.session_streak, 10)
-        : 0; // Pertahankan streak
+        : 0;
     } else {
       sessionScore = lastGameSession
         ? parseInt(lastGameSession.session_score, 10)
-        : 0; // Tidak reset session_score saat kalah
-      sessionStreak = 0; // Reset streak saat kalah
+        : 0;
+      sessionStreak = 0;
     }
 
     console.log("Session Streak being passed:", sessionStreak);
-    // Simpan sesi game ke database
+
     const gameSession = await gameSessionService.createGameSession(
       userId,
       sessionScore,
       sessionStreak
     );
+
+    let updatedGameSession = gameSession;
+
+    if (sessionStreak === 0) {
+      const updatedGameSession =
+        await gameSessionService.updateGameSessionEndedAt(gameSession.game_id);
+      console.log("Updated game session with ended_at:", updatedGameSession);
+    }
 
     res.status(200).json({
       message: "Game played successfully",
@@ -51,7 +58,7 @@ const startGameSession = async (req, res) => {
         userChoice,
         computerChoice,
         result,
-        gameSession,
+        gameSession: updatedGameSession,
       },
     });
   } catch (error) {
