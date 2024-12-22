@@ -2,7 +2,7 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
 function Button({
   bgColor = "#CB1B45",
-  textColor = "F5F5F5",
+  textColor = "white",
   text,
   onPress = () => {},
 }) {
@@ -18,8 +18,8 @@ function Button({
 
 const style = StyleSheet.create({
   button: {
-    paddingVertical: 15,
-    marginTop: 20,
+    paddingVertical: 19,
+    marginTop: 10,
     paddingHorizontal: 30,
     borderRadius: 30,
     width: "90%",
@@ -28,8 +28,9 @@ const style = StyleSheet.create({
     elevation: 5,
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "bold",
+    fontFamily: "poppins",
   },
 });
 
