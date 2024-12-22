@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Link, useNavigation, useRouter } from "expo-router";
 import {
@@ -102,6 +103,9 @@ export default function App() {
           Click here!
         </Link>
 
+      <Link href="/draw" style={styles.linkText}>
+        Draw page
+      </Link>
       <StatusBar style="auto" hidden />
     </View>
   );
