@@ -80,17 +80,20 @@ export default function App() {
         style={styles.logo}
         resizeMode="stretch"
       />
-    <Text style = {{alignSelf: "align-start", color: "#CB1B45", }} > Username </Text>
-    {/* {errorMsg.email ? (
+      <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>
+        {" "}
+        Username{" "}
+      </Text>
+      {/* {errorMsg.email ? (
         <Text style={styles.errorMsg}>{errorMsg.email}</Text>
       ) : null} */}
 
-    <TextInput style={styles.input} />
-    <Text style = {{alignSelf: "align-start", color: "#CB1B45", }} > Password </Text>
-      <TextInput
-        style={styles.input}
-        secureTextEntry={true}
-      />
+      <TextInput style={styles.input} />
+      <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>
+        {" "}
+        Password{" "}
+      </Text>
+      <TextInput style={styles.input} secureTextEntry={true} />
       {/* {errorMsg.password ? (
         <Text style={styles.errorMsg}>{errorMsg.password}</Text>
       ) : null} */}
@@ -100,11 +103,15 @@ export default function App() {
         Don't have an account? {""}
       </Text>
       <Link href="/register" style={styles.rgs}>
-          Click here!
-        </Link>
+        Click here!
+      </Link>
 
       <Link href="/draw" style={styles.linkText}>
         Draw page
+      </Link>
+
+      <Link href="/home" style={styles.linkText}>
+        Home page
       </Link>
       <StatusBar style="auto" hidden />
     </View>
@@ -158,9 +165,9 @@ const styles = StyleSheet.create({
   rgs: {
     marginTop: -5,
     color: "#CB1B45",
-    fontStyle: 'italic', // Italic text
-    fontWeight: 'bold',  // Bold text
-    textDecorationLine: 'underline',
+    fontStyle: "italic", // Italic text
+    fontWeight: "bold", // Bold text
+    textDecorationLine: "underline",
   },
 
   blmrgs: {
