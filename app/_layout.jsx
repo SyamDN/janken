@@ -14,7 +14,7 @@ export default function Layout() {
       }}
     >
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="login" />
+      <Stack.Screen name="register" options={{ headerShown: false }} />
     </Stack>
   );
 }
