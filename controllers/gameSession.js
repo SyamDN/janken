@@ -6,14 +6,43 @@ const startGameSession = async (req, res) => {
     const userId = req.user.id;
 
     const computerChoice = generateComputerChoice();
-
     const result = determineWinner(userChoice, computerChoice);
 
-    const sessionScore = result === "win" ? 1 : 0;
+    // Ambil sesi terakhir user
+    const lastGameSession = await gameSessionService.getLastGameSession(userId);
 
+    let sessionScore = 0;
+    let sessionStreak = 0;
+
+    if (result === "win") {
+      sessionScore = lastGameSession
+        ? parseInt(lastGameSession.session_score, 10) + 1
+        : 1;
+
+      sessionStreak = lastGameSession
+        ? parseInt(lastGameSession.session_streak, 10) + 1
+        : 1; // Tambah streak
+    } else if (result === "draw") {
+      sessionScore = lastGameSession
+        ? parseInt(lastGameSession.session_score, 10)
+        : 0;
+
+      sessionStreak = lastGameSession
+        ? parseInt(lastGameSession.session_streak, 10)
+        : 0; // Pertahankan streak
+    } else {
+      sessionScore = lastGameSession
+        ? parseInt(lastGameSession.session_score, 10)
+        : 0; // Tidak reset session_score saat kalah
+      sessionStreak = 0; // Reset streak saat kalah
+    }
+
+    console.log("Session Streak being passed:", sessionStreak);
+    // Simpan sesi game ke database
     const gameSession = await gameSessionService.createGameSession(
       userId,
-      sessionScore
+      sessionScore,
+      sessionStreak
     );
 
     res.status(200).json({
