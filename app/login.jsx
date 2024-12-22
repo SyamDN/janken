@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: "#f9f9f9",
     fontSize: 16,
+    
   },
   inputpw: {
     width: "100%",
