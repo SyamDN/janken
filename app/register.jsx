@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { z } from 'zod';
+import Button from '../components/button';
 
 export default function Register() {
     const [username, setUsername] = useState('');
@@ -127,6 +128,7 @@ export default function Register() {
                 <Text style={styles.errorMsg}>{errorMsg.password}</Text>
             ) : null}
             <TouchableOpacity style={styles.button} onPress={handleRegister}>
+                {/* <Button onPress={handleRegister} text="Register" /> */}
                 <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
         </View>
@@ -178,6 +180,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         backgroundColor: "#f9f9f9",
         fontSize: 16,
+        textAlign: 'left',
     },
     button: {
         marginTop: 20,
@@ -186,12 +189,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 40,
         borderRadius: 25,
         alignItems: 'center',
-        width: '100%',
+        width: '85%',
     },
     buttonText: {
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 24,
-        padding: 7,
+        weight: 20,
     },
 });

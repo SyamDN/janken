@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   },
 
   blmrgs: {
-    alignSelf: "flex-star",
+    alignSelf: "flex-start",
   },
   text: {
     color: "white",
