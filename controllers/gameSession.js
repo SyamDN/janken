@@ -22,7 +22,13 @@ const startGameSession = async (req, res) => {
         ? parseInt(lastGameSession.session_streak, 10) + 1
         : 1;
 
-        if (sessionStreak > sessionScore) {
+        if (sessionStreak <= sessionScore) {
+          sessionScore = lastGameSession
+        ? parseInt(lastGameSession.session_score, 10)
+        : 0;
+        }
+
+        else if (sessionStreak > sessionScore) {
           sessionScore = sessionStreak;
         }
         
