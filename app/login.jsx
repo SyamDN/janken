@@ -102,13 +102,23 @@ export default function App() {
       <Text style={{ alignSelf: "center", padding: 7, color: "#CB1B45" }}>
         Don't have an account? {""}
       </Text>
+
       <Link href="/register" style={styles.rgs}>
         Click here!
       </Link>
 
+      <Link href="/win" style={styles.linkText}>
+        Win page
+      </Link>
+
+      <Link href="/lose" style={styles.linkText}>
+        Lose page
+      </Link>
+      
       <Link href="/draw" style={styles.linkText}>
         Draw page
       </Link>
+
 
       <Link href="/home" style={styles.linkText}>
         Home page
