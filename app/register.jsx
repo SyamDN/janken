@@ -99,14 +99,14 @@ export default function Register() {
                 visible={modalVisible}
                 onRequestClose={() => setModalVisible(!modalVisible)}
             ></Modal>
-            <Text>Username</Text>
+            <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>Username</Text>
             <TextInput
                 style={styles.input}
                 value={username}
                 onChangeText={setUsername}
                 placeholderTextColor="#999"
             />
-            <Text>Email</Text>
+            <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>Email</Text>
             <TextInput
                 style={styles.input}
                 value={form.email}
@@ -116,7 +116,7 @@ export default function Register() {
             {errorMsg.email ? (
                 <Text style={styles.errorMsg}>{errorMsg.email}</Text>
             ) : null}
-            <Text>Password</Text>
+            <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>Password</Text>
             <TextInput
                 style={styles.input}
                 value={form.password}
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 24,
+        padding: 7,
     },
 });
