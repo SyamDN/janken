@@ -14,13 +14,18 @@ const startGameSession = async (req, res) => {
     let sessionStreak = 0;
 
     if (result === "win") {
-      sessionScore = lastGameSession
-        ? parseInt(lastGameSession.session_score, 10) + 1
-        : 1;
+      // sessionScore = lastGameSession
+      //   ? parseInt(lastGameSession.session_score, 10) + 1
+      //   : 1;
 
       sessionStreak = lastGameSession
         ? parseInt(lastGameSession.session_streak, 10) + 1
         : 1;
+
+        if (sessionStreak > sessionScore) {
+          sessionScore = sessionStreak;
+        }
+        
     } else if (result === "draw") {
       sessionScore = lastGameSession
         ? parseInt(lastGameSession.session_score, 10)
