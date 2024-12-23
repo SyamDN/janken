@@ -11,6 +11,13 @@ import JankenChoices from '../components/JankenChoice';
 
 export default function userPick() {
   const [score, setScore] = useState(0);
+  // State to store the player's choice
+  const [playerChoice, setPlayerChoice] = useState(null);
+
+  // Callback function to handle player's choice
+  const handleChoice = (choice) => {
+    setPlayerChoice(choice);
+  };
 
   return (
     <View style={styles.container}>
@@ -32,7 +39,16 @@ export default function userPick() {
       <View style={styles.gameArea}>
         <View style={styles.gameProfile}>
           <Text style={styles.circleText}>You</Text>
-          <View style={styles.circle}></View>
+          <View style={styles.circle}>
+          {playerChoice ? (
+              <>
+                <Text style={styles.choiceIcon}>{playerChoice.icon}</Text>
+                <Text style={styles.choiceLabel}>{playerChoice.label}</Text>
+              </>
+            ) : (
+              <Text style={styles.placeholder}>?</Text>
+            )}
+          </View>
         </View>
 
         <Text style={styles.vsText}>VS</Text>
@@ -44,7 +60,7 @@ export default function userPick() {
       </View>
 
       {/* Janken Choices */}
-      <JankenChoices />
+      <JankenChoices onChoiceSelect={handleChoice} />
     </View>
   );
 }
@@ -90,7 +106,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: '#CB1B45',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 2,
     elevation: 5,
