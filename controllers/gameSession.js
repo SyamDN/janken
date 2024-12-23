@@ -14,18 +14,20 @@ const startGameSession = async (req, res) => {
     let sessionStreak = 0;
 
     if (result === "win") {
-      // sessionScore = lastGameSession
-      //   ? parseInt(lastGameSession.session_score, 10) + 1
-      //   : 1;
+      sessionScore = lastGameSession
+        ? parseInt(lastGameSession.session_score, 10) + 1
+        : 1;
+      
+      let newSessionScore = lastGameSession
+        ? parseInt(lastGameSession.session_score, 10)
+        : 0;
 
       sessionStreak = lastGameSession
         ? parseInt(lastGameSession.session_streak, 10) + 1
         : 1;
 
         if (sessionStreak <= sessionScore) {
-          sessionScore = lastGameSession
-        ? parseInt(lastGameSession.session_score, 10)
-        : 0;
+          sessionScore = newSessionScore
         }
 
         else if (sessionStreak > sessionScore) {
@@ -40,6 +42,7 @@ const startGameSession = async (req, res) => {
       sessionStreak = lastGameSession
         ? parseInt(lastGameSession.session_streak, 10)
         : 0;
+        
     } else {
       sessionScore = lastGameSession
         ? parseInt(lastGameSession.session_score, 10)
@@ -52,7 +55,7 @@ const startGameSession = async (req, res) => {
     const gameSession = await gameSessionService.createGameSession(
       userId,
       sessionScore,
-      sessionStreak
+      sessionStreak,
     );
 
     let updatedGameSession = gameSession;
