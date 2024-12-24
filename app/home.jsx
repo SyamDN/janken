@@ -9,20 +9,59 @@ import {
   ScrollView,
 } from "react-native";
 import Button from "../components/button";
+import { useEffect, useState, React, useCallback } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 export default function Home({}) {
-  const dummyData = [
-    { username: "IsnaB3ll4", score: 999 },
-    { username: "R3drum", score: 850 },
-    { username: "Flame0n", score: 780 },
-    { username: "Ghostly", score: 750 },
-    { username: "AceHigh", score: 730 },
-    { username: "SkyWalker", score: 700 },
-    { username: "Shadow", score: 650 },
-    { username: "Phoenix", score: 600 },
-    { username: "Dreamer", score: 550 },
-    { username: "p4rhanz", score: 500 },
-  ];
+  const [player, setPlayer] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // const onRefresh = useCallback(() => {
+  //   setRefreshing(true);
+  //   setTimeout(() => {
+  //     setRefreshing(false);
+  //   }, 2000);
+  // }, []);
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const value = await AsyncStorage.getItem("token");
+  //       if (value != null) {
+  //         const res = await axios.get(
+  //           "https://janken-api-fix.vercel.app/api/profile",
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${value}`,
+  //             },
+  //           }
+  //         );
+  //         const user = res.data.data;
+  //         setUser(user);
+  //       }
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   };
+  //   getData();
+  // }, [refreshing]);
+
+  useEffect(() => {
+    const getTransaction = async () => {
+      try {
+        const res = await axios.get(
+          "https://janken-api-fix.vercel.app/api/users"
+        );
+        const player = res.data.data;
+        setPlayer(player);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getTransaction();
+  }, []);
+
   const currentUser = { username: "YourAccount", score: 80 }; // Contoh user saat ini
 
   const getRankIcon = (rank) => {
@@ -51,6 +90,7 @@ export default function Home({}) {
           style={styles.logo}
         />
       </View>
+
       {/* Leaderboard Section */}
       <View style={styles.leaderboardContainer}>
         <Text style={styles.leaderboardTitle}>Leaderboard</Text>
@@ -62,7 +102,8 @@ export default function Home({}) {
         </View>
 
         <ScrollView style={styles.tableContent}>
-          {dummyData.slice(0, 10).map((item, index) => (
+          {/* {dummyData.slice(0, 10).map((item, index) => ( */}
+          {player.slice(0, 10).map((players, index) => (
             <View style={styles.tableRow} key={index}>
               <View style={styles.rankCell}>
                 <Image
@@ -71,8 +112,8 @@ export default function Home({}) {
                 />
                 <Text style={styles.rankText}>{index + 1}</Text>
               </View>
-              <Text style={styles.tableCell}>{item.username}</Text>
-              <Text style={styles.tableCell}>{item.score}</Text>
+              <Text style={styles.tableCell}>{players.username}</Text>
+              <Text style={styles.tableCell}>{players.win_streak}</Text>
             </View>
           ))}
         </ScrollView>
