@@ -45,7 +45,7 @@ const login = async (userData) => {
   }
 
   const token = generateAccessToken({
-    username: userData.email,
+    username: userData.username,
     id: user.rows[0].id,
   });
 
