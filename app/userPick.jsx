@@ -46,7 +46,7 @@ export default function userPick() {
                 <Text style={styles.choiceLabel}>{playerChoice.label}</Text>
               </>
             ) : (
-              <Text style={styles.placeholder}>?</Text>
+              <Text style={styles.placeholder}>?</Text> //belum dicommit sama syam
             )}
           </View>
         </View>
@@ -55,7 +55,7 @@ export default function userPick() {
 
         <View style={styles.gameProfile}>
           <Text style={styles.circleText}>Computer</Text>
-          <View style={styles.circle}></View>
+          <View style={styles.circle}></View> //tinggal dari komputer
         </View>
       </View>
 
@@ -153,3 +153,87 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+// import React, { useState } from 'react';
+// import { View, Text, Button, StyleSheet } from 'react-native';
+
+// const App = () => {
+//   const [playerChoice, setPlayerChoice] = useState('');
+//   const [computerChoice, setComputerChoice] = useState('');
+//   const [result, setResult] = useState('');
+
+//   // Pilihan komputer secara acak
+//   const getComputerChoice = () => {
+//     const choices = ['Gunting', 'Batu', 'Kertas'];
+//     const randomIndex = Math.floor(Math.random() * choices.length);
+//     return choices[randomIndex];
+//   };
+
+//   // Menentukan pemenang
+//   const determineWinner = (player, computer) => {
+//     if (player === computer) {
+//       return 'Seri!';
+//     } else if (
+//       (player === 'Gunting' && computer === 'Kertas') ||
+//       (player === 'Kertas' && computer === 'Batu') ||
+//       (player === 'Batu' && computer === 'Gunting')
+//     ) {
+//       return 'Kamu Menang!';
+//     } else {
+//       return 'Komputer Menang!';
+//     }
+//   };
+
+//   // Fungsi untuk memulai game
+//   const playGame = (choice) => {
+//     const computer = getComputerChoice();
+//     const gameResult = determineWinner(choice, computer);
+
+//     setPlayerChoice(choice);
+//     setComputerChoice(computer);
+//     setResult(gameResult);
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <Text style={styles.title}>Gunting, Batu, Kertas</Text>
+
+//       {/* Tombol Pilihan */}
+//       <View style={styles.choicesContainer}>
+//         <Button title="Gunting" onPress={() => playGame('Gunting')} />
+//         <Button title="Batu" onPress={() => playGame('Batu')} />
+//         <Button title="Kertas" onPress={() => playGame('Kertas')} />
+//       </View>
+
+//       {/* Hasil */}
+//       <Text style={styles.resultText}>Pilihan Kamu: {playerChoice}</Text>
+//       <Text style={styles.resultText}>Pilihan Komputer: {computerChoice}</Text>
+//       <Text style={styles.resultText}>Hasil: {result}</Text>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#f5f5f5',
+//   },
+//   title: {
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//     marginBottom: 20,
+//   },
+//   choicesContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-around',
+//     marginBottom: 20,
+//     width: '80%',
+//   },
+//   resultText: {
+//     fontSize: 18,
+//     marginVertical: 10,
+//   },
+// });
+
+// export default App;
