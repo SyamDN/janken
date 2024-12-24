@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { router } from "expo-router";
 import {
     View,
     Text,
@@ -12,6 +13,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { z } from 'zod';
 import Button from '../components/button';
+import axios from "axios"
 
 export default function Register() {
     const [username, setUsername] = useState('');
@@ -30,7 +32,9 @@ export default function Register() {
     });
 
     const handleInputChange = (key, value) => {
+
         setForm({ ...form, [key]: value });
+        console.log(form)
         try {
             RegisterSchema.pick({ [key]: true }).parse({ [key]: value });
             setErrors((prev) => ({ ...prev, [key]: "" }));
@@ -53,18 +57,18 @@ export default function Register() {
         if (
             !username ||
             !form.email ||
-            !form.password ||
-            !isChecked
+            !form.password
+
         ) {
             Alert.alert(
                 "Error",
-                "All collumn must be filled and agree with the terms and conditions"
+                "All collumn must be filled"
             );
             return;
         }
 
         try {
-            const response = await axios.post("https://walled-api-indol.vercel.app/register", {
+            const response = await axios.post("https://janken-api-fix.vercel.app/api/users", {
                 username: username,
                 email: form.email,
                 password: form.password,
