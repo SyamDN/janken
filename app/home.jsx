@@ -1,4 +1,5 @@
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -9,7 +10,7 @@ import {
 } from "react-native";
 import Button from "../components/button";
 
-export default function Home() {
+export default function Home({}) {
   const dummyData = [
     { username: "IsnaB3ll4", score: 999 },
     { username: "R3drum", score: 850 },
@@ -22,22 +23,34 @@ export default function Home() {
     { username: "Dreamer", score: 550 },
     { username: "p4rhanz", score: 500 },
   ];
+  const currentUser = { username: "YourAccount", score: 80 }; // Contoh user saat ini
 
   const getRankIcon = (rank) => {
-    if (rank === 1) return require("../assets/rank1.png"); // Yellow circle for rank 1
-    if (rank === 2) return require("../assets/rank2.png"); // Blue circle for rank 2
-    if (rank === 3) return require("../assets/rank3.png"); // Red circle for rank 3
-    return require("../assets/rank4.png"); // Black circle for ranks 4 and above
+    if (rank === 1) return require("../assets/rank1.png");
+    if (rank === 2) return require("../assets/rank2.png");
+    if (rank === 3) return require("../assets/rank3.png");
+    return require("../assets/rank4.png");
   };
+
+  const navigation = useNavigation(); // Access navigation
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Logo */}
-      <Image
-        source={require("../assets/janken_logo-white.png")}
-        style={styles.logo}
-      />
+      <View style={styles.header}>
+        <View style={styles.scoreContainer}>
+          <Text style={styles.scoreText}>Hi , {currentUser.username}</Text>
+          <View>
+            <Text style={styles.scoreText}>
+              Highscore : {currentUser.score}
+            </Text>
+          </View>
+        </View>
 
+        <Image
+          source={require("../assets/janken_logo-white.png")}
+          style={styles.logo}
+        />
+      </View>
       {/* Leaderboard Section */}
       <View style={styles.leaderboardContainer}>
         <Text style={styles.leaderboardTitle}>Leaderboard</Text>
@@ -47,8 +60,9 @@ export default function Home() {
           <Text style={styles.tableHeaderText}>Username</Text>
           <Text style={styles.tableHeaderText}>Score</Text>
         </View>
+
         <ScrollView style={styles.tableContent}>
-          {dummyData.map((item, index) => (
+          {dummyData.slice(0, 10).map((item, index) => (
             <View style={styles.tableRow} key={index}>
               <View style={styles.rankCell}>
                 <Image
@@ -70,13 +84,13 @@ export default function Home() {
           text="Play Game"
           textColor="#CB1B45"
           bgColor="#F5F5F5"
-          onPress={() => {}}
+          onPress={() => navigation.navigate("userPick")}
         />
         <Button
           text="Quit"
           textColor="#CB1B45"
           bgColor="#F5F5F5"
-          onPress={() => {}}
+          onPress={() => navigation.navigate("login")}
         />
       </View>
     </SafeAreaView>
@@ -91,24 +105,45 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "90%",
+    top: 0,
+    position: "absolute",
+  },
+  scoreContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginRight: 15, // Add margin to separate from logo
+  },
+  scoreText: {
+    alignSelf: "align-start",
+    color: "#FFF",
+    fontSize: 13,
+  },
+
   logo: {
-    width: 158,
-    height: 76,
+    width: 100, // Adjust logo width
+    height: 100, // Adjust logo height
+    justifyContent: "flex-end",
     resizeMode: "contain",
-    marginBottom: 20,
   },
   leaderboardContainer: {
     backgroundColor: "#FFFFFF",
     borderRadius: 35,
-    padding: 15,
+    padding: 10,
     width: "90%",
     alignItems: "center",
+    marginTop: 80,
     marginBottom: 1,
-    borderWidth: 2,
+    borderWidth: 5,
     borderColor: "#FFD700", // Gold border
   },
   leaderboardTitle: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#000000",
   },
@@ -122,7 +157,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    marginBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#E0E0E0",
     paddingBottom: 5,
@@ -135,12 +169,14 @@ const styles = StyleSheet.create({
   },
   tableContent: {
     width: "100%",
+    paddingVertical: 10,
   },
   tableRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
+    marginBottom: 15,
   },
   rankCell: {
     flexDirection: "row",
@@ -148,11 +184,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     position: "relative",
-    marginBottom: 9,
   },
   rankIcon: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
     alignItems: "center",
     position: "absolute",
   },
