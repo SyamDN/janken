@@ -1,13 +1,13 @@
 const pool = require("../db/db");
 
-const findUserByEmail = async (email) => {
+const findUserByUsername = async (email) => {
   try {
-    const result = await pool.query("SELECT * FROM users where email = $1", [
-      email,
+    const result = await pool.query("SELECT * FROM users where username = $1", [
+      username,
     ]);
     return result;
   } catch (error) {
-    throw new Error("Error in findUserByEmail repository");
+    throw new Error("Error in findUserByUsername repository");
   }
 };
 
@@ -86,7 +86,7 @@ const updateWinStreak = async (userId, sessionStreak) => {
 
 module.exports = {
   createUser,
-  findUserByEmail,
+  findUserByUsername,
   getUser,
   getUsers,
   updateWinStreak,

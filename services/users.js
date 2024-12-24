@@ -3,7 +3,7 @@ const userRepository = require("../repositories/users");
 const { generateAccessToken } = require("../utils/authUtil");
 
 const createUser = async (userData) => {
-  let user = await userRepository.findUserByEmail(userData.email);
+  let user = await userRepository.findUserByUsername(userData.username);
   if (user.rows.length > 0) {
     throw new Error("user already exist");
   }
@@ -31,7 +31,7 @@ const getUsers = async () => {
 };
 
 const login = async (userData) => {
-  let user = await userRepository.findUserByEmail(userData.email);
+  let user = await userRepository.findUserByUsername(userData.username);
   if (user.rows.length === 0) {
     throw new Error(404);
   }
