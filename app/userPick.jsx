@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   Image,
   Platform,
-} from 'react-native';
-import JankenChoices from '../components/JankenChoice';
+} from "react-native";
+import JankenChoices from "../components/JankenChoice";
 
 export default function userPick() {
   const [score, setScore] = useState(0);
@@ -30,7 +30,7 @@ export default function userPick() {
           </View>
         </View>
         <Image
-          source={require('../assets/janken_logo-white.png')}
+          source={require("../assets/janken_logo-white.png")}
           style={styles.logo}
         />
       </View>
@@ -40,7 +40,7 @@ export default function userPick() {
         <View style={styles.gameProfile}>
           <Text style={styles.circleText}>You</Text>
           <View style={styles.circle}>
-          {playerChoice ? (
+            {playerChoice ? (
               <>
                 <Text style={styles.choiceIcon}>{playerChoice.icon}</Text>
                 <Text style={styles.choiceLabel}>{playerChoice.label}</Text>
@@ -68,44 +68,44 @@ export default function userPick() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#CB1B45',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    backgroundColor: "#CB1B45",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '90%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "90%",
   },
   logo: {
     width: 100, // Adjust logo width
     height: 100, // Adjust logo height
-    justifyContent: 'flex-end',
-    resizeMode: 'contain',
+    justifyContent: "flex-end",
+    resizeMode: "contain",
   },
   scoreContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
     marginRight: 15, // Add margin to separate from logo
   },
   scoreText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   scoreBox: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     width: 37,
     height: 37,
     marginLeft: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 3,
-    borderColor: '#CB1B45',
-    shadowColor: '#000',
+    borderColor: "#CB1B45",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 2,
@@ -113,27 +113,27 @@ const styles = StyleSheet.create({
   },
   scoreNumber: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   gameArea: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    justifyContent: 'space-around',
-    width: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    justifyContent: "space-around",
+    width: "100%",
   },
   gameProfile: {
-    flexDirection: 'column',
-    alignItems: 'center',
+    flexDirection: "column",
+    alignItems: "center",
   },
   circle: {
-    backgroundColor: '#FFF',
+    backgroundColor: "#FFF",
     width: 100,
     height: 100,
     borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
@@ -141,16 +141,16 @@ const styles = StyleSheet.create({
   },
   circleText: {
     fontSize: 16,
-    color: '#FFF',
+    color: "#FFF",
     marginBottom: 10,
   },
   vsText: {
-    color: '#FFF',
+    color: "#FFF",
     fontSize: 46,
-    fontWeight: 'bold',
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
+    fontWeight: "bold",
+    alignItems: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 // import React, { useState } from 'react';

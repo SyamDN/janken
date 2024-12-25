@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import Svg, { Defs, Path } from 'react-native-svg';
+import Svg, { Defs, Path, Rect } from 'react-native-svg';
+
 
 const { width } = Dimensions.get('window');
 const CIRCLE_RADIUS = width * 0.5; // Adjust the radius based on screen width
