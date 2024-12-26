@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,17 +6,110 @@ import {
   TouchableOpacity,
   Image,
   Platform,
-} from "react-native";
-import JankenChoices from "../components/JankenChoice";
+} from 'react-native';
+import JankenChoices from '../components/JankenChoice';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
 
-export default function userPick() {
+export default function UserPick() {
   const [score, setScore] = useState(0);
-  // State to store the player's choice
   const [playerChoice, setPlayerChoice] = useState(null);
+  const [computerChoice, setComputerChoice] = useState(null);
+  const router = useRouter();
 
-  // Callback function to handle player's choice
-  const handleChoice = (choice) => {
+  // Fungsi untuk mendapatkan sumber gambar berdasarkan pilihan
+  const getChoiceImage = (choice) => {
+    switch (choice) {
+      case 'rock':
+        return (
+          <Image
+            source={require('../assets/ButtonRockChoosed.svg')}
+            style={{ width: 100, height: 100 }}
+          />
+        );
+      case 'scissors':
+        return (
+          <Image
+            source={require('../assets/ButtonScissorChoosed.svg')}
+            style={{ width: 100, height: 100 }}
+          />
+        );
+      case 'paper':
+        return (
+          <Image
+            source={require('../assets/ButtonPaperChoosed.svg')}
+            style={{ width: 100, height: 100 }}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  const handleChoice = async (choice) => {
+    const validChoices = ['rock', 'paper', 'scissors'];
+    if (!validChoices.includes(choice)) {
+      console.error('Invalid choice:', choice);
+      return;
+    }
+
     setPlayerChoice(choice);
+
+    try {
+      // Get the token from AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        console.error('No token found');
+        // Redirect ke login atau tampilkan error
+        return;
+      }
+
+      // Send the user's choice to the backend
+      const response = await axios.post(
+        'https://janken-api-fix.vercel.app/api/game-session/play',
+        { userChoice: choice },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('Full Response:', response);
+      console.log('Response Data:', response.data);
+      console.log('Game Result:', response.data);
+
+      // Handle the response
+      const gameResult = response.data.data;
+
+      console.log('Result:', gameResult.result);
+      console.log('User Choice:', gameResult.userChoice);
+      console.log('Computer Choice:', gameResult.computerChoice);
+
+      // Set computer choice from backend response
+      setComputerChoice(gameResult.computerChoice);
+
+      // Navigate to the appropriate result screen based on the game result
+      if (gameResult.result === 'win') {
+        router.replace('/win');
+      } else if (gameResult.result === 'lose') {
+        router.replace('/lose');
+      } else if (gameResult.result === 'draw') {
+        router.replace('/draw');
+      } else {
+        console.error('Unexpected game result:', gameResult);
+        router.replace('/home');
+      }
+    } catch (error) {
+      console.error('Error Playing Game:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+      });
+    }
   };
 
   return (
@@ -30,7 +123,7 @@ export default function userPick() {
           </View>
         </View>
         <Image
-          source={require("../assets/janken_logo-white.png")}
+          source={require('../assets/janken_logo-white.png')}
           style={styles.logo}
         />
       </View>
@@ -40,14 +133,7 @@ export default function userPick() {
         <View style={styles.gameProfile}>
           <Text style={styles.circleText}>You</Text>
           <View style={styles.circle}>
-            {playerChoice ? (
-              <>
-                <Text style={styles.choiceIcon}>{playerChoice.icon}</Text>
-                <Text style={styles.choiceLabel}>{playerChoice.label}</Text>
-              </>
-            ) : (
-              <Text style={styles.placeholder}>?</Text> //belum dicommit sama syam
-            )}
+            {playerChoice && getChoiceImage(playerChoice)}
           </View>
         </View>
 
@@ -55,7 +141,9 @@ export default function userPick() {
 
         <View style={styles.gameProfile}>
           <Text style={styles.circleText}>Computer</Text>
-          <View style={styles.circle}></View> //tinggal dari komputer
+          <View style={styles.circle}>
+            {computerChoice && getChoiceImage(computerChoice)}
+          </View>
         </View>
       </View>
 
@@ -68,44 +156,44 @@ export default function userPick() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#CB1B45",
-    alignItems: "center",
-    justifyContent: "space-between",
+    backgroundColor: '#CB1B45',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "90%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '90%',
   },
   logo: {
     width: 100, // Adjust logo width
     height: 100, // Adjust logo height
-    justifyContent: "flex-end",
-    resizeMode: "contain",
+    justifyContent: 'flex-end',
+    resizeMode: 'contain',
   },
   scoreContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     marginRight: 15, // Add margin to separate from logo
   },
   scoreText: {
-    color: "#FFF",
+    color: '#FFF',
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 
   scoreBox: {
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
     width: 37,
     height: 37,
     marginLeft: 15,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 3,
-    borderColor: "#CB1B45",
-    shadowColor: "#000",
+    borderColor: '#CB1B45',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 2,
@@ -113,27 +201,27 @@ const styles = StyleSheet.create({
   },
   scoreNumber: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   gameArea: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    justifyContent: "space-around",
-    width: "100%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    justifyContent: 'space-around',
+    width: '100%',
   },
   gameProfile: {
-    flexDirection: "column",
-    alignItems: "center",
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   circle: {
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
     width: 100,
     height: 100,
     borderRadius: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
@@ -141,16 +229,21 @@ const styles = StyleSheet.create({
   },
   circleText: {
     fontSize: 16,
-    color: "#FFF",
+    color: '#FFF',
     marginBottom: 10,
   },
   vsText: {
-    color: "#FFF",
+    color: '#FFF',
     fontSize: 46,
-    fontWeight: "bold",
-    alignItems: "center",
-    justifyContent: "center",
-    alignItems: "center",
+    fontWeight: 'bold',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  choiceImage: {
+    width: 70, // Sesuaikan dengan ukuran lingkaran
+    height: 70,
+    resizeMode: 'contain',
   },
 });
 // import React, { useState } from 'react';

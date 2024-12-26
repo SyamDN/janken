@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,33 +8,51 @@ import {
 } from 'react-native';
 import Svg, { Defs, Path, Rect } from 'react-native-svg';
 
-
 const { width } = Dimensions.get('window');
-const CIRCLE_RADIUS = width * 0.5; // Adjust the radius based on screen width
-const BUTTON_SIZE = 110; // Size of the choice buttons
+const CIRCLE_RADIUS = width * 0.5;
+const BUTTON_SIZE = 110;
 const BUTTON_RADIUS = BUTTON_SIZE / 2;
 
 export default function JankenChoices({ onChoiceSelect }) {
-  // States for both buttons
-  const [isToggled1, setIsToggled1] = useState(false);
-  const [isToggled2, setIsToggled2] = useState(false);
-  const [isToggled3, setIsToggled3] = useState(false);
-
-  // Refs for TouchableOpacity (optional, if you need direct access)
-  const button1Ref = useRef(null);
-  const button2Ref = useRef(null);
-  const button3Ref = useRef(null);
+    const [selectedChoice, setSelectedChoice] = useState(null);
+    const [isToggled1, setIsToggled1] = useState(false);
+    const [isToggled2, setIsToggled2] = useState(false);
+    const [isToggled3, setIsToggled3] = useState(false);
+  
+    const handleChoiceSelect = (choice) => {
+      // Reset semua toggle
+      setIsToggled1(false);
+      setIsToggled2(false);
+      setIsToggled3(false);
+  
+      // Set toggle sesuai pilihan
+      switch (choice) {
+        case 'rock':
+          setIsToggled1(true);
+          break;
+        case 'scissors':
+          setIsToggled2(true);
+          break;
+        case 'paper':
+          setIsToggled3(true);
+          break;
+      }
+  
+      // Panggil fungsi onChoiceSelect yang diterima dari parent
+      onChoiceSelect(choice);
+    };
+  
 
   return (
     <View style={styles.container}>
-      {/* Replace the arc with an SVG */}
+      {/* Existing SVG and content remain the same */}
       <Svg
         style={styles.arc}
-        viewBox="0 0 400 400" // Adjust the viewBox dimensions as per your SVG
+        viewBox="0 0 400 400"
         preserveAspectRatio="xMidYMid meet"
       >
         <Path
-          d="M-68.5269 115.255C80.9872 -34.2592 323.398 -34.2593 472.912 115.255L554.849 197.192L202.192 549.849L-150.464 197.192L-68.5269 115.255Z" // Example SVG path
+          d="M-68.5269 115.255C80.9872 -34.2592 323.398 -34.2593 472.912 115.255L554.849 197.192L202.192 549.849L-150.464 197.192L-68.5269 115.255Z"
           fill="#5d2835"
           stroke="#efbac7"
           strokeWidth={5}
@@ -45,16 +63,27 @@ export default function JankenChoices({ onChoiceSelect }) {
         <View style={styles.choices}>
           {/* Rock (Left) */}
           <TouchableOpacity
-            ref={button1Ref}
-            style={[styles.choiceButton, styles.rock]}
-            onPress={() => setIsToggled1(!isToggled1)} // Pass the index to the handler
+            style={[
+              styles.choiceButton,
+              styles.rock,
+              selectedChoice &&
+                selectedChoice !== 'rock' &&
+                styles.disabledChoice,
+            ]}
+            onPress={() => [
+              handleChoiceSelect('rock'),
+              setIsToggled1(!isToggled1),
+            ]}
+            disabled={selectedChoice && selectedChoice !== 'rock'}
           >
+            {/* Existing SVG content */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width={101}
               height={100}
               fill="none"
             >
+              {/* SVG content remains the same, but use isToggled1 for color */}
               <g filter="url(#a)">
                 <rect
                   width={97.676}
@@ -133,17 +162,29 @@ export default function JankenChoices({ onChoiceSelect }) {
             </svg>
           </TouchableOpacity>
 
+          {/* Scissors (Top) */}
           <TouchableOpacity
-            ref={button2Ref}
-            style={[styles.choiceButton, styles.scissors]}
-            onPress={() => setIsToggled2(!isToggled2)} // Pass the index to the handler
+            style={[
+              styles.choiceButton,
+              styles.scissors,
+              selectedChoice &&
+                selectedChoice !== 'scissors' &&
+                styles.disabledChoice,
+            ]}
+            onPress={() => [
+              handleChoiceSelect('scissors'),
+              setIsToggled2(!isToggled2),
+            ]}
+            disabled={selectedChoice && selectedChoice !== 'scissors'}
           >
+            {/* Existing SVG content */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width={101}
               height={100}
               fill="none"
             >
+              {/* SVG content remains the same, but use isToggled2 for color */}
               <g filter="url(#a)">
                 <rect
                   width={97.676}
@@ -221,12 +262,23 @@ export default function JankenChoices({ onChoiceSelect }) {
               </defs>
             </svg>
           </TouchableOpacity>
+
           {/* Paper (Right) */}
           <TouchableOpacity
-            ref={button3Ref}
-            style={[styles.choiceButton, styles.paper]}
-            onPress={() => setIsToggled3(!isToggled3)}
+            style={[
+              styles.choiceButton,
+              styles.paper,
+              selectedChoice &&
+                selectedChoice !== 'paper' &&
+                styles.disabledChoice,
+            ]}
+            onPress={() => [
+              handleChoiceSelect('paper'),
+              setIsToggled3(!isToggled3),
+            ]}
+            disabled={selectedChoice && selectedChoice !== 'paper'}
           >
+            {/* Existing SVG content */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width={101}
@@ -380,5 +432,8 @@ const styles = StyleSheet.create({
   },
   choiceText: {
     fontSize: 30,
+  },
+  disabledChoice: {
+    opacity: 0.3, // Membuat tombol yang tidak dipilih terlihat redup
   },
 });
