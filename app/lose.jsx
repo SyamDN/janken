@@ -1,25 +1,36 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import { useRouter } from 'expo-router'; // Gunakan useRouter untuk navigasi
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GameResultPopup = ({ isVisible, onPlayAgain, onBackToHome }) => {
   return (
-    <Modal
-      transparent={true}
-      visible={isVisible}
-      animationType="fade"
-    >
+    <Modal transparent={true} visible={isVisible} animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.popupContainer}>
           <Image
-            source={require("../assets/lose.png")}
+            source={require('../assets/lose.png')} // Ganti dengan gambar lose
             style={styles.image}
           />
-          
+
           {/* Buttons */}
-          <TouchableOpacity style={styles.playAgainButton} onPress={onPlayAgain}>
+          <TouchableOpacity
+            style={styles.playAgainButton}
+            onPress={onPlayAgain}
+          >
             <Text style={styles.playAgainText}>Play Again</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.backHomeButton} onPress={onBackToHome}>
+          <TouchableOpacity
+            style={styles.backHomeButton}
+            onPress={onBackToHome}
+          >
             <Text style={styles.backHomeText}>Back to Home</Text>
           </TouchableOpacity>
         </View>
@@ -30,20 +41,44 @@ const GameResultPopup = ({ isVisible, onPlayAgain, onBackToHome }) => {
 
 export default function App() {
   const [isModalVisible, setModalVisible] = useState(true);
+  const router = useRouter(); // Inisialisasi router
 
-  const handlePlayAgain = () => {
-    setModalVisible(false);
-    // Add logic to reset the game
+  const handlePlayAgain = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        console.error('No token found');
+        router.replace('/login');
+        return;
+      }
+
+      router.replace('/userPick');
+    } catch (error) {
+      console.error('Error in play again:', error);
+      router.replace('/login');
+    }
   };
 
-  const handleBackToHome = () => {
-    setModalVisible(false);
-    // Add logic to navigate to home
+  const handleBackToHome = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        console.error('No token found');
+        router.replace('/login');
+        return;
+      }
+
+      router.replace('/home');
+    } catch (error) {
+      console.error('Error in back to home:', error);
+      router.replace('/login');
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* Popup Component */}
       <GameResultPopup
         isVisible={isModalVisible}
         onPlayAgain={handlePlayAgain}
@@ -93,7 +128,6 @@ const styles = StyleSheet.create({
     width: '80%',
     alignItems: 'center',
     marginBottom: 10,
-    
   },
   playAgainText: {
     color: '#fff',

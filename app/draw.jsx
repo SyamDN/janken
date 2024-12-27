@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Image } from 'react-native';
+import { useRouter } from 'expo-router'; // Gunakan useRouter untuk navigasi
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const GameResultPopup = ({ isVisible, onPlayAgain, onBackToHome }) => {
   return (
@@ -11,7 +13,7 @@ const GameResultPopup = ({ isVisible, onPlayAgain, onBackToHome }) => {
       <View style={styles.overlay}>
         <View style={styles.popupContainer}>
           <Image
-            source={require("../assets/draw.png")}
+            source={require("../assets/draw.png")} // Ganti dengan gambar draw
             style={styles.image}
           />
           
@@ -30,20 +32,44 @@ const GameResultPopup = ({ isVisible, onPlayAgain, onBackToHome }) => {
 
 export default function App() {
   const [isModalVisible, setModalVisible] = useState(true);
+  const router = useRouter(); // Inisialisasi router
 
-  const handlePlayAgain = () => {
-    setModalVisible(false);
-    // Add logic to reset the game
+  const handlePlayAgain = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        console.error('No token found');
+        router.replace('/login');
+        return;
+      }
+
+      router.replace('/userPick');
+    } catch (error) {
+      console.error('Error in play again:', error);
+      router.replace('/login');
+    }
   };
 
-  const handleBackToHome = () => {
-    setModalVisible(false);
-    // Add logic to navigate to home
+  const handleBackToHome = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+
+      if (!token) {
+        console.error('No token found');
+        router.replace('/login');
+        return;
+      }
+
+      router.replace('/home');
+    } catch (error) {
+      console.error('Error in back to home:', error);
+      router.replace('/login');
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* Popup Component */}
       <GameResultPopup
         isVisible={isModalVisible}
         onPlayAgain={handlePlayAgain}

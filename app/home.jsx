@@ -1,5 +1,5 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -7,16 +7,19 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-} from "react-native";
-import Button from "../components/button";
-import { useEffect, useState, React, useCallback } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+} from 'react-native';
+import Button from '../components/button';
+import { useEffect, useState, React, useCallback } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function Home({}) {
   const [player, setPlayer] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
+  const [currentUser, setCurrentUser] = useState({
+    username: 'Loading...',
+    score: 0,
+  });
   // const onRefresh = useCallback(() => {
   //   setRefreshing(true);
   //   setTimeout(() => {
@@ -47,28 +50,88 @@ export default function Home({}) {
   //   getData();
   // }, [refreshing]);
 
+  // Tambahkan useEffect untuk mengambil data profil
   useEffect(() => {
-    const getTransaction = async () => {
+    const fetchUserProfile = async () => {
       try {
-        const res = await axios.get(
-          "https://janken-api-fix.vercel.app/api/users"
+        // Ambil token dari AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        // Kirim request ke endpoint profil
+        const response = await axios.get(
+          'https://janken-api-fix.vercel.app/api/profile',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        const player = res.data.data;
-        setPlayer(player);
-      } catch (e) {
-        console.log(e);
+
+        // Update state dengan data dari response
+        setCurrentUser({
+          username: response.data.data.username,
+          score: response.data.data.win_streak || 0,
+        });
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+
+        // Handle error - misalnya set username ke default jika gagal
+        setCurrentUser({
+          username: 'Guest',
+          score: 0,
+        });
       }
     };
-    getTransaction();
+
+    const fetchLeaderboard = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        const response = await axios.get(
+          'https://janken-api-fix.vercel.app/api/users',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            params: {
+              sort: 'win_streak',
+              order: 'desc',
+              limit: 10,
+            },
+          }
+        );
+
+        // Pastikan response memiliki data
+        if (response.data && response.data.data) {
+          setPlayer(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+        // Set default atau kosongkan data jika gagal
+        setPlayer([]);
+      }
+    };
+
+    // Panggil kedua fungsi
+    fetchUserProfile();
+    fetchLeaderboard();
   }, []);
 
-  const currentUser = { username: "YourAccount", score: 80 }; // Contoh user saat ini
-
   const getRankIcon = (rank) => {
-    if (rank === 1) return require("../assets/rank1.png");
-    if (rank === 2) return require("../assets/rank2.png");
-    if (rank === 3) return require("../assets/rank3.png");
-    return require("../assets/rank4.png");
+    if (rank === 1) return require('../assets/rank1.png');
+    if (rank === 2) return require('../assets/rank2.png');
+    if (rank === 3) return require('../assets/rank3.png');
+    return require('../assets/rank4.png');
   };
 
   const navigation = useNavigation(); // Access navigation
@@ -86,7 +149,7 @@ export default function Home({}) {
         </View>
 
         <Image
-          source={require("../assets/janken_logo-white.png")}
+          source={require('../assets/janken_logo-white.png')}
           style={styles.logo}
         />
       </View>
@@ -102,8 +165,7 @@ export default function Home({}) {
         </View>
 
         <ScrollView style={styles.tableContent}>
-          {/* {dummyData.slice(0, 10).map((item, index) => ( */}
-          {player.slice(0, 10).map((players, index) => (
+          {player.map((players, index) => (
             <View style={styles.tableRow} key={index}>
               <View style={styles.rankCell}>
                 <Image
@@ -125,13 +187,13 @@ export default function Home({}) {
           text="Play Game"
           textColor="#CB1B45"
           bgColor="#F5F5F5"
-          onPress={() => navigation.navigate("userPick")}
+          onPress={() => navigation.navigate('userPick')}
         />
         <Button
           text="Quit"
           textColor="#CB1B45"
           bgColor="#F5F5F5"
-          onPress={() => navigation.navigate("login")}
+          onPress={() => navigation.navigate('login')}
         />
       </View>
     </SafeAreaView>
@@ -140,117 +202,117 @@ export default function Home({}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#CB1B45",
+    backgroundColor: '#CB1B45',
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "90%",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '90%',
     top: 0,
-    position: "absolute",
+    position: 'absolute',
   },
   scoreContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     marginRight: 15, // Add margin to separate from logo
   },
   scoreText: {
-    alignSelf: "align-start",
-    color: "#FFF",
+    alignSelf: 'align-start',
+    color: '#FFF',
     fontSize: 13,
   },
 
   logo: {
     width: 100, // Adjust logo width
     height: 100, // Adjust logo height
-    justifyContent: "flex-end",
-    resizeMode: "contain",
+    justifyContent: 'flex-end',
+    resizeMode: 'contain',
   },
   leaderboardContainer: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
     borderRadius: 35,
     padding: 10,
-    width: "90%",
-    alignItems: "center",
+    width: '90%',
+    alignItems: 'center',
     marginTop: 80,
     marginBottom: 1,
     borderWidth: 5,
-    borderColor: "#FFD700", // Gold border
+    borderColor: '#FFD700', // Gold border
   },
   leaderboardTitle: {
     fontSize: 30,
-    fontWeight: "bold",
-    color: "#000000",
+    fontWeight: 'bold',
+    color: '#000000',
   },
   leaderboardSubtitle: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#000000",
+    fontWeight: 'bold',
+    color: '#000000',
     marginBottom: 10,
   },
   tableHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
     borderBottomWidth: 1,
-    borderBottomColor: "#E0E0E0",
+    borderBottomColor: '#E0E0E0',
     paddingBottom: 5,
   },
   tableHeaderText: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     flex: 1,
-    textAlign: "center",
+    textAlign: 'center',
   },
   tableContent: {
-    width: "100%",
+    width: '100%',
     paddingVertical: 10,
   },
   tableRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
     marginBottom: 15,
   },
   rankCell: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     flex: 1,
-    justifyContent: "center",
-    position: "relative",
+    justifyContent: 'center',
+    position: 'relative',
   },
   rankIcon: {
     width: 30,
     height: 30,
-    alignItems: "center",
-    position: "absolute",
+    alignItems: 'center',
+    position: 'absolute',
   },
   rankText: {
     fontSize: 14,
-    color: "#FFFFFF",
-    fontWeight: "bold",
+    color: '#FFFFFF',
+    fontWeight: 'bold',
     zIndex: 1,
   },
   tableCell: {
     fontSize: 14,
     flex: 1,
-    textAlign: "center",
-    color: "#000000",
+    textAlign: 'center',
+    color: '#000000',
   },
   ellipsis: {
     fontSize: 14,
-    textAlign: "center",
+    textAlign: 'center',
     marginVertical: 5,
   },
   buttonContainer: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
 });

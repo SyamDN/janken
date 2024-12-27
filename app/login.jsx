@@ -48,7 +48,7 @@ export default function App() {
       );
       await AsyncStorage.setItem("token", res.data.data.token);
       console.log("Login successful, navigating to userPick");
-      router.replace("/userPick");
+      router.replace("/home");
     } catch (err) {
       console.error("Error during login:", err); // Log error
       if (axios.isAxiosError(err)) {
