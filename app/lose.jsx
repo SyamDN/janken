@@ -91,14 +91,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-<<<<<<< HEAD
     justifyContent: 'center',
     alignItems: 'center',
-=======
-    justifyContent: "center",
-    alignItems: "center",
-    // backgroundColor: '#f8d5d5',
->>>>>>> 60d91354de20c327cd8cec15012a885521453c1b
   },
   title: {
     fontSize: 24,
@@ -107,15 +101,9 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-<<<<<<< HEAD
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
-=======
-    justifyContent: "center",
-    alignItems: "center",
-    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
->>>>>>> 60d91354de20c327cd8cec15012a885521453c1b
   },
   popupContainer: {
     width: 280,
