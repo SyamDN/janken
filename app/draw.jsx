@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    zIndex: 10,
   },
   popupContainer: {
     width: 280,
@@ -137,3 +138,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+

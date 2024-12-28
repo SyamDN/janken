@@ -54,7 +54,7 @@ export default function App() {
       if (axios.isAxiosError(err)) {
         if (err.response) {
           console.error("Server responded with:", err.response.data); // Log detail dari respons server
-          setServerError(err.response.data.message || "An error occurred");
+          setServerError(err.response.data.message || "Username or password incorrect");
         } else if (err.request) {
           setServerError("Network error. Please try again later.");
           console.error("Network Error:", err.request);
@@ -78,12 +78,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {serverError && <Text>{serverError}</Text>}
+
       <Image
         source={require("../assets/janken_logo-red.png")}
         style={styles.logo}
         resizeMode="stretch"
       />
+        {serverError && <Text style={styles.errorSrvrMsg}>{serverError}</Text>}
       <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>
         {" "}
         Username{" "}
@@ -120,9 +121,9 @@ export default function App() {
         Click here!
       </Link>
 
-      <Link href="/draw" style={styles.linkText}>
+      {/* <Link href="/draw" style={styles.linkText}>
         Draw page
-      </Link>
+      </Link> */}
       </Text>
 
 
@@ -199,7 +200,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold", // Bold text
     textDecorationLine: "underline",
   },
-
+  errorSrvrMsg: {
+    marginBottom: 20,
+    marginTop: -10,
+    color: "#CB1B45",
+    fontStyle: "italic",
+  },
   blmrgs: {
     alignSelf: "flex-start",
   },
