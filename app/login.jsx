@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: -10,
     color: "#CB1B45",
-    fontStyle: "italic",
+    fontFamily: "Poppins_400Regular_Italic",
   },
   blmrgs: {
     alignSelf: "flex-start",
@@ -225,5 +225,6 @@ const styles = StyleSheet.create({
   errorMsg: {
     color: "red",
     width: "100%",
+    fontFamily: "Poppins_400Regular",
   },
 });

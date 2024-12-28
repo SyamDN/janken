@@ -228,5 +228,6 @@ const styles = StyleSheet.create({
       errorMsg: {
         color: "red",
         width: "100%",
+        fontFamily: "Poppins_400Regular",
       },
 });
