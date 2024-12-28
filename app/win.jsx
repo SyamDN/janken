@@ -83,7 +83,11 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {/* Popup Component */}
+            <Image
+              source={require("../assets/janken_logo-white.png")}
+              style={styles.logo}
+              resizeMode="stretch"
+            />
       <GameResultPopup
         isVisible={isModalVisible}
         onPlayAgain={handlePlayAgain}
@@ -98,12 +102,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: '#f8d5d5',
+    backgroundColor: "#CB1B45",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+  },
+  logo: {
+    width: 200,
+    height: 100,
+    marginTop: -90,
+    marginBottom: 350,
   },
   overlay: {
     flex: 1,
