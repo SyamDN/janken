@@ -119,7 +119,13 @@ export default function App() {
       <Link href="/register" style={styles.rgs}>
         Click here!
       </Link>
+
+      <Link href="/draw" style={styles.linkText}>
+        Draw page
+      </Link>
       </Text>
+
+
 
       {/* <Link href="/win" style={styles.linkText}>
         Win page
@@ -129,9 +135,7 @@ export default function App() {
         Lose page
       </Link>
 
-      <Link href="/draw" style={styles.linkText}>
-        Draw page
-      </Link>
+
 
       <Link href="/home" style={styles.linkText}>
         Home page
