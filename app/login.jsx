@@ -14,6 +14,12 @@ import { z } from "zod";
 import React, { useState } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {  
+  Poppins_400Regular,
+  Poppins_700Bold_Italic,
+  Poppins_400Regular_Italic,
+} from "@expo-google-fonts/poppins";
+import { useFonts } from "expo-font";
 
 const LoginSchema = z.object({
   username: z.string().min(1, { message: "Invalid username" }),
@@ -76,6 +82,12 @@ export default function App() {
     }
   };
 
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_700Bold_Italic,
+    Poppins_400Regular_Italic,
+  });
+
   return (
     <View style={styles.container}>
 
@@ -85,7 +97,7 @@ export default function App() {
         resizeMode="stretch"
       />
         {serverError && <Text style={styles.errorSrvrMsg}>{serverError}</Text>}
-      <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>
+      <Text style={{ alignSelf: "align-start", color: "#CB1B45",     fontFamily: "Poppins_400Regular", }}>
         {" "}
         Username{" "}
       </Text>
@@ -99,7 +111,7 @@ export default function App() {
         <Text style={styles.errorMsg}>{errorMsg.username}</Text>
       ) : null}
 
-      <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>
+      <Text style={{ alignSelf: "align-start", color: "#CB1B45", fontFamily: "Poppins_400Regular" }}>
         {" "}
         Password{" "}
       </Text>
@@ -115,7 +127,7 @@ export default function App() {
       ) : null}
 
       <Button onPress={handleSubmit} text="Login" />
-      <Text style={{ alignSelf: "center", padding: 7, color: "#CB1B45" }}>
+      <Text style={{ alignSelf: "center", padding: 7, color: "#CB1B45", fontFamily: "Poppins_400Regular" }}>
         Don't have an account? {""}
         <Link href="/register" style={styles.rgs}>
         Click here!
@@ -193,8 +205,7 @@ const styles = StyleSheet.create({
   rgs: {
     marginTop: -5,
     color: "#CB1B45",
-    fontStyle: "italic", // Italic text
-    fontWeight: "bold", // Bold text
+    fontFamily: "Poppins_700Bold_Italic",
     textDecorationLine: "underline",
   },
   errorSrvrMsg: {

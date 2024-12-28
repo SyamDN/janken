@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router"; // Gunakan useRouter untuk navigasi
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Poppins_700Bold from "@expo-google-fonts/poppins";
+
+import { useFonts } from "expo-font";
 
 const GameResultPopup = ({ isVisible, onPlayAgain, onBackToHome }) => {
   return (
@@ -77,6 +80,10 @@ export default function App() {
     }
   };
 
+      const [fontsLoaded] = useFonts({
+        Poppins_700Bold,
+      });
+
   return (
     <View style={styles.container}>
             <Image
@@ -142,7 +149,7 @@ const styles = StyleSheet.create({
   },
   playAgainText: {
     color: "#fff",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   backHomeButton: {
     backgroundColor: "#FFC408",
@@ -153,6 +160,6 @@ const styles = StyleSheet.create({
   },
   backHomeText: {
     color: "#fff",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
 });

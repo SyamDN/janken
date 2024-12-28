@@ -12,6 +12,12 @@ import Button from '../components/button';
 import { useEffect, useState, React, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import {  
+  Poppins_400Regular,
+  Poppins_700Bold_Italic,
+  Poppins_400Regular_Italic,
+} from "@expo-google-fonts/poppins";
+import { useFonts } from "expo-font";
 
 export default function Home({}) {
   const [player, setPlayer] = useState([]);
@@ -136,6 +142,11 @@ export default function Home({}) {
   };
 
   const navigation = useNavigation(); // Access navigation
+    const [fontsLoaded] = useFonts({
+      Poppins_400Regular,
+      Poppins_700Bold_Italic,
+      Poppins_400Regular_Italic,
+    });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -227,6 +238,7 @@ const styles = StyleSheet.create({
     alignSelf: 'align-start',
     color: '#FFF',
     fontSize: 13,
+    fontFamily: "Poppins_400Regular",
   },
 
   logo: {
@@ -250,12 +262,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     color: '#000000',
+    fontFamily: "Poppins_400Regular",
   },
   leaderboardSubtitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#000000',
     marginBottom: 10,
+    fontFamily: "Poppins_400Regular",
   },
   tableHeader: {
     flexDirection: 'row',
@@ -270,6 +284,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     flex: 1,
     textAlign: 'center',
+    fontFamily: "Poppins_400Regular",
   },
   tableContent: {
     width: '100%',
@@ -300,12 +315,14 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: 'bold',
     zIndex: 1,
+    fontFamily: "Poppins_400Regular",
   },
   tableCell: {
     fontSize: 14,
     flex: 1,
     textAlign: 'center',
     color: '#000000',
+    fontFamily: "Poppins_400Regular",
   },
   ellipsis: {
     fontSize: 14,

@@ -22,6 +22,12 @@ import Svg, {
   FeBlend,
   Filter,
 } from "react-native-svg";
+import {  
+  Poppins_400Regular,
+  Poppins_700Bold_Italic,
+  Poppins_400Regular_Italic,
+} from "@expo-google-fonts/poppins";
+import { useFonts } from "expo-font";
 
 const { width } = Dimensions.get("window");
 const CIRCLE_RADIUS = width * 0.5;
@@ -56,6 +62,12 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
     // Panggil fungsi onChoiceSelect yang diterima dari parent
     onChoiceSelect(choice);
   };
+
+    const [fontsLoaded] = useFonts({
+      Poppins_400Regular,
+      Poppins_700Bold_Italic,
+      Poppins_400Regular_Italic,
+    });
 
   return (
     <View style={styles.container}>
@@ -424,6 +436,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#FFF",
     textAlign: "center",
+    fontFamily: "Poppins_400Regular",
     position: "absolute",
     top: CIRCLE_RADIUS * 0.7, // Adjust position
     width: "100%",

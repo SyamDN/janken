@@ -14,6 +14,12 @@ import { useNavigation } from '@react-navigation/native';
 import { z } from 'zod';
 import Button from '../components/button';
 import axios from "axios"
+import {  
+    Poppins_400Regular,
+    Poppins_700Bold_Italic,
+    Poppins_400Regular_Italic,
+  } from "@expo-google-fonts/poppins";
+  import { useFonts } from "expo-font";
 
 export default function Register() {
     const [username, setUsername] = useState('');
@@ -89,6 +95,12 @@ export default function Register() {
         }
     };
 
+      const [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+        Poppins_700Bold_Italic,
+        Poppins_400Regular_Italic,
+      });
+
     return (
         <View style={styles.container}>
             {/* <Text style={styles.header}>Register</Text>
@@ -104,14 +116,14 @@ export default function Register() {
                 visible={modalVisible}
                 onRequestClose={() => setModalVisible(!modalVisible)}
             ></Modal>
-            <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>Username</Text>
+            <Text style={{ alignSelf: "align-start", color: "#CB1B45", fontFamily: "Poppins_400Regular" }}>Username</Text>
             <TextInput
                 style={styles.input}
                 value={username}
                 onChangeText={setUsername}
                 placeholderTextColor="#999"
             />
-            <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>Email</Text>
+            <Text style={{ alignSelf: "align-start", color: "#CB1B45", fontFamily: "Poppins_400Regular" }}>Email</Text>
             <TextInput
                 style={styles.input}
                 value={form.email}
@@ -121,7 +133,7 @@ export default function Register() {
             {errorMsg.email ? (
                 <Text style={styles.errorMsg}>{errorMsg.email}</Text>
             ) : null}
-            <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>Password</Text>
+            <Text style={{ alignSelf: "align-start", color: "#CB1B45", fontFamily: "Poppins_400Regular" }}>Password</Text>
             <TextInput
                 style={styles.input}
                 value={form.password}
@@ -135,7 +147,7 @@ export default function Register() {
                 {/* <Button onPress={handleRegister} text="Register" /> */}
                 <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
-            <Text style={{ alignSelf: "center", padding: 7, color: "#CB1B45" }}>
+            <Text style={{ alignSelf: "center", padding: 7, color: "#CB1B45", fontFamily: "Poppins_400Regular" }}>
                 Have an account? {""}
             </Text>
             <Link href="/login" style={styles.rgs}>
@@ -210,8 +222,7 @@ const styles = StyleSheet.create({
     rgs: {
         marginTop: -5,
         color: "#CB1B45",
-        fontStyle: "italic", // Italic text
-        fontWeight: "bold", // Bold text
+        fontFamily: "Poppins_700Bold_Italic",
         textDecorationLine: "underline",
       },
       errorMsg: {
