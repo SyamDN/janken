@@ -1,28 +1,37 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Image } from 'react-native';
-import { useRouter } from 'expo-router'; // Gunakan useRouter untuk navigasi
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+import { useRouter } from "expo-router"; // Gunakan useRouter untuk navigasi
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const GameResultPopup = ({ isVisible, onPlayAgain, onBackToHome }) => {
   return (
-    <Modal
-      transparent={true}
-      visible={isVisible}
-      animationType="fade"
-    >
+    <Modal transparent={true} visible={isVisible} animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.popupContainer}>
           <Image
             source={require("../assets/draw.png")} // Ganti dengan gambar draw
             style={styles.image}
           />
-          
+
           {/* Buttons */}
-          <TouchableOpacity style={styles.playAgainButton} onPress={onPlayAgain}>
+          <TouchableOpacity
+            style={styles.playAgainButton}
+            onPress={onPlayAgain}
+          >
             <Text style={styles.playAgainText}>Play Again</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.backHomeButton} onPress={onBackToHome}>
-            <Text style={styles.backHomeText}>Back to Home</Text>
+          <TouchableOpacity
+            style={styles.backHomeButton}
+            onPress={onBackToHome}
+          >
+            <Text style={styles.backHomeText}>End Game</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -36,35 +45,35 @@ export default function App() {
 
   const handlePlayAgain = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem("token");
 
       if (!token) {
-        console.error('No token found');
-        router.replace('/login');
+        console.error("No token found");
+        router.replace("/login");
         return;
       }
 
-      router.replace('/userPick');
+      router.replace("/userPick");
     } catch (error) {
-      console.error('Error in play again:', error);
-      router.replace('/login');
+      console.error("Error in play again:", error);
+      router.replace("/login");
     }
   };
 
   const handleBackToHome = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem("token");
 
       if (!token) {
-        console.error('No token found');
-        router.replace('/login');
+        console.error("No token found");
+        router.replace("/login");
         return;
       }
 
-      router.replace('/home');
+      router.replace("/home");
     } catch (error) {
-      console.error('Error in back to home:', error);
-      router.replace('/login');
+      console.error("Error in back to home:", error);
+      router.replace("/login");
     }
   };
 
@@ -82,28 +91,28 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     // backgroundColor: '#f8d5d5',
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   overlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     // backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   popupContainer: {
     width: 280,
     height: 260,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 30,
-    alignItems: 'center',
+    alignItems: "center",
     elevation: 5,
   },
   image: {
@@ -113,27 +122,26 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   playAgainButton: {
-    backgroundColor: '#CB1B45',
+    backgroundColor: "#CB1B45",
     padding: 10,
     borderRadius: 15,
-    width: '80%',
-    alignItems: 'center',
+    width: "80%",
+    alignItems: "center",
     marginBottom: 10,
-    
   },
   playAgainText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   backHomeButton: {
-    backgroundColor: '#FFC408',
+    backgroundColor: "#FFC408",
     padding: 10,
     borderRadius: 15,
-    width: '80%',
-    alignItems: 'center',
+    width: "80%",
+    alignItems: "center",
   },
   backHomeText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
