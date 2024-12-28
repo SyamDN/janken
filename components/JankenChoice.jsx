@@ -13,35 +13,34 @@ const CIRCLE_RADIUS = width * 0.5;
 const BUTTON_SIZE = 110;
 const BUTTON_RADIUS = BUTTON_SIZE / 2;
 
-export default function JankenChoices({ onChoiceSelect }) {
-    const [selectedChoice, setSelectedChoice] = useState(null);
-    const [isToggled1, setIsToggled1] = useState(false);
-    const [isToggled2, setIsToggled2] = useState(false);
-    const [isToggled3, setIsToggled3] = useState(false);
-  
-    const handleChoiceSelect = (choice) => {
-      // Reset semua toggle
-      setIsToggled1(false);
-      setIsToggled2(false);
-      setIsToggled3(false);
-  
-      // Set toggle sesuai pilihan
-      switch (choice) {
-        case 'rock':
-          setIsToggled1(true);
-          break;
-        case 'scissors':
-          setIsToggled2(true);
-          break;
-        case 'paper':
-          setIsToggled3(true);
-          break;
-      }
-  
-      // Panggil fungsi onChoiceSelect yang diterima dari parent
-      onChoiceSelect(choice);
-    };
-  
+export default function JankenChoices({ onChoiceSelect, disabled = false }) {
+  const [selectedChoice, setSelectedChoice] = useState(null);
+  const [isToggled1, setIsToggled1] = useState(false);
+  const [isToggled2, setIsToggled2] = useState(false);
+  const [isToggled3, setIsToggled3] = useState(false);
+
+  const handleChoiceSelect = (choice) => {
+    // Reset semua toggle
+    setIsToggled1(false);
+    setIsToggled2(false);
+    setIsToggled3(false);
+
+    // Set toggle sesuai pilihan
+    switch (choice) {
+      case 'rock':
+        setIsToggled1(true);
+        break;
+      case 'scissors':
+        setIsToggled2(true);
+        break;
+      case 'paper':
+        setIsToggled3(true);
+        break;
+    }
+
+    // Panggil fungsi onChoiceSelect yang diterima dari parent
+    onChoiceSelect(choice);
+  };
 
   return (
     <View style={styles.container}>
@@ -66,15 +65,13 @@ export default function JankenChoices({ onChoiceSelect }) {
             style={[
               styles.choiceButton,
               styles.rock,
-              selectedChoice &&
-                selectedChoice !== 'rock' &&
-                styles.disabledChoice,
+              disabled && styles.disabledChoice,
             ]}
             onPress={() => [
               handleChoiceSelect('rock'),
               setIsToggled1(!isToggled1),
             ]}
-            disabled={selectedChoice && selectedChoice !== 'rock'}
+            disabled={disabled}
           >
             {/* Existing SVG content */}
             <svg
@@ -167,15 +164,13 @@ export default function JankenChoices({ onChoiceSelect }) {
             style={[
               styles.choiceButton,
               styles.scissors,
-              selectedChoice &&
-                selectedChoice !== 'scissors' &&
-                styles.disabledChoice,
+              disabled && styles.disabledChoice,
             ]}
             onPress={() => [
               handleChoiceSelect('scissors'),
               setIsToggled2(!isToggled2),
             ]}
-            disabled={selectedChoice && selectedChoice !== 'scissors'}
+            disabled={disabled}
           >
             {/* Existing SVG content */}
             <svg
@@ -268,15 +263,13 @@ export default function JankenChoices({ onChoiceSelect }) {
             style={[
               styles.choiceButton,
               styles.paper,
-              selectedChoice &&
-                selectedChoice !== 'paper' &&
-                styles.disabledChoice,
+              disabled && styles.disabledChoice,
             ]}
             onPress={() => [
               handleChoiceSelect('paper'),
               setIsToggled3(!isToggled3),
             ]}
-            disabled={selectedChoice && selectedChoice !== 'paper'}
+            disabled={disabled}
           >
             {/* Existing SVG content */}
             <svg
@@ -434,6 +427,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   disabledChoice: {
-    opacity: 0.3, // Membuat tombol yang tidak dipilih terlihat redup
+    opacity: 0.3, // Membuat tombol terlihat redup
   },
 });

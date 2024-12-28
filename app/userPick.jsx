@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import JankenChoices from '../components/JankenChoice';
 import axios from 'axios';
@@ -16,8 +17,55 @@ export default function UserPick() {
   const [score, setScore] = useState(0);
   const [playerChoice, setPlayerChoice] = useState(null);
   const [computerChoice, setComputerChoice] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  const [currentUser, setCurrentUser] = useState({
+    username: 'Loading...',
+    score: 0,
+  });
+
+  // Effect untuk mengambil data profil
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        // 1. Ambil token dari AsyncStorage
+        const token = await AsyncStorage.getItem('token');
+
+        if (!token) {
+          console.error('No token found');
+          return;
+        }
+
+        // 2. Kirim request ke endpoint profil
+        const response = await axios.get(
+          'https://janken-api-fix.vercel.app/api/profile',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // 3. Update state dengan data dari response
+        setCurrentUser({
+          username: response.data.data.username,
+          score: response.data.data.win_streak || 0,
+        });
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+
+        // Handle error - set default values
+        setCurrentUser({
+          username: 'Guest',
+          score: 0,
+        });
+      }
+    };
+
+    // Panggil fungsi fetch
+    fetchUserProfile();
+  }, []);
   // Fungsi untuk mendapatkan sumber gambar berdasarkan pilihan
   const getChoiceImage = (choice) => {
     switch (choice) {
@@ -25,27 +73,31 @@ export default function UserPick() {
         return (
           <Image
             source={require('../assets/ButtonRockChoosed.svg')}
-            style={{ width: 100, height: 100 }}
+            style={{ width: 110, height: 110 }}
           />
         );
       case 'scissors':
         return (
           <Image
             source={require('../assets/ButtonScissorChoosed.svg')}
-            style={{ width: 100, height: 100 }}
+            style={{ width: 110, height: 110 }}
           />
         );
       case 'paper':
         return (
           <Image
             source={require('../assets/ButtonPaperChoosed.svg')}
-            style={{ width: 100, height: 100 }}
+            style={{ width: 110, height: 110 }}
           />
         );
       default:
         return null;
     }
   };
+
+  useEffect(() => {
+    console.log('Computer Choice State:', computerChoice);
+  }, [computerChoice]);
 
   const handleChoice = async (choice) => {
     const validChoices = ['rock', 'paper', 'scissors'];
@@ -55,6 +107,7 @@ export default function UserPick() {
     }
 
     setPlayerChoice(choice);
+    setIsLoading(true);
 
     try {
       // Get the token from AsyncStorage
@@ -65,6 +118,9 @@ export default function UserPick() {
         // Redirect ke login atau tampilkan error
         return;
       }
+
+      //delay
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Delay 2 detik
 
       // Send the user's choice to the backend
       const response = await axios.post(
@@ -77,21 +133,19 @@ export default function UserPick() {
           },
         }
       );
-
-      console.log('Full Response:', response);
-      console.log('Response Data:', response.data);
-      console.log('Game Result:', response.data);
-
       // Handle the response
       const gameResult = response.data.data;
+
+      setComputerChoice(gameResult.computerChoice);
+
+      setIsLoading(false);
 
       console.log('Result:', gameResult.result);
       console.log('User Choice:', gameResult.userChoice);
       console.log('Computer Choice:', gameResult.computerChoice);
 
-      // Set computer choice from backend response
-      setComputerChoice(gameResult.computerChoice);
-
+      // Delay sebelum redirect untuk memastikan pilihan komputer ditampilkan
+      await new Promise((resolve) => setTimeout(resolve, 3000)); // Delay 2 detik
       // Navigate to the appropriate result screen based on the game result
       if (gameResult.result === 'win') {
         router.replace('/win');
@@ -104,6 +158,7 @@ export default function UserPick() {
         router.replace('/home');
       }
     } catch (error) {
+      setIsLoading(false); // Pastikan loading dihentikan jika ada error
       console.error('Error Playing Game:', {
         status: error.response?.status,
         data: error.response?.data,
@@ -119,7 +174,7 @@ export default function UserPick() {
         <View style={styles.scoreContainer}>
           <Text style={styles.scoreText}>Score</Text>
           <View style={styles.scoreBox}>
-            <Text style={styles.scoreNumber}>{score}</Text>
+            <Text style={styles.scoreNumber}>{currentUser.score}</Text>
           </View>
         </View>
         <Image
@@ -142,13 +197,25 @@ export default function UserPick() {
         <View style={styles.gameProfile}>
           <Text style={styles.circleText}>Computer</Text>
           <View style={styles.circle}>
-            {computerChoice && getChoiceImage(computerChoice)}
+            {playerChoice ? (
+              isLoading ? (
+                <ActivityIndicator
+                  size="large"
+                  color="#CB1B45"
+                  style={{
+                    transform: [{ scale: 1.5 }], // Membuat loading indicator lebih besar
+                  }}
+                />
+              ) : computerChoice ? (
+                getChoiceImage(computerChoice)
+              ) : null
+            ) : null}
           </View>
         </View>
       </View>
 
       {/* Janken Choices */}
-      <JankenChoices onChoiceSelect={handleChoice} />
+      <JankenChoices onChoiceSelect={handleChoice} disabled={isLoading} />
     </View>
   );
 }
@@ -217,7 +284,7 @@ const styles = StyleSheet.create({
   circle: {
     backgroundColor: '#FFF',
     width: 100,
-    height: 100,
+    height: 99,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',

@@ -115,6 +115,7 @@ export default function Home({}) {
         if (response.data && response.data.data) {
           setPlayer(response.data.data);
         }
+        console.log('aku ganteng', response.data.data);
       } catch (error) {
         console.error('Error fetching leaderboard:', error);
         // Set default atau kosongkan data jika gagal
