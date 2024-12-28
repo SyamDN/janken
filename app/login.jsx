@@ -1,5 +1,5 @@
-import { StatusBar } from "expo-status-bar";
-import { Link, useRouter } from "expo-router";
+import { StatusBar } from 'expo-status-bar';
+import { Link, useRouter } from 'expo-router';
 import {
   StyleSheet,
   Text,
@@ -8,65 +8,68 @@ import {
   onPress,
   TouchableOpacity,
   Image,
-} from "react-native";
-import Button from "../components/button";
-import { z } from "zod";
-import React, { useState } from "react";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {  
+  SafeAreaView,
+} from 'react-native';
+import Button from '../components/button';
+import { z } from 'zod';
+import React, { useState } from 'react';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
   Poppins_400Regular,
   Poppins_700Bold_Italic,
   Poppins_400Regular_Italic,
-} from "@expo-google-fonts/poppins";
-import { useFonts } from "expo-font";
+} from '@expo-google-fonts/poppins';
+import { useFonts } from 'expo-font';
 
 const LoginSchema = z.object({
-  username: z.string().min(1, { message: "Invalid username" }),
-  password: z.string().min(6, { message: "Must be 6 or more characters long" }),
+  username: z.string().min(1, { message: 'Invalid username' }),
+  password: z.string().min(6, { message: 'Must be 6 or more characters long' }),
 });
 
 export default function App() {
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ username: '', password: '' });
   const [errorMsg, setErrors] = useState({});
-  const [serverError, setServerError] = useState(" ");
+  const [serverError, setServerError] = useState(' ');
   const router = useRouter();
 
   const handleInputChange = (key, value) => {
     setForm({ ...form, [key]: value });
     try {
       LoginSchema.pick({ [key]: true }).parse({ [key]: value });
-      setErrors((prev) => ({ ...prev, [key]: "" }));
+      setErrors((prev) => ({ ...prev, [key]: '' }));
     } catch (err) {
       setErrors((prev) => ({ ...prev, [key]: err.errors[0].message }));
     }
   };
 
   const handleSubmit = async () => {
-    console.log("Form data:", form); // Log form data
+    console.log('Form data:', form); // Log form data
     try {
       LoginSchema.parse(form);
-      console.log("Validation passed");
+      console.log('Validation passed');
 
       const res = await axios.post(
-        "https://janken-api-fix.vercel.app/api/auth/login",
+        'https://janken-api-fix.vercel.app/api/auth/login',
         form
       );
-      await AsyncStorage.setItem("token", res.data.data.token);
-      console.log("Login successful, navigating to userPick");
-      router.replace("/home");
+      await AsyncStorage.setItem('token', res.data.data.token);
+      console.log('Login successful, navigating to userPick');
+      router.replace('/home');
     } catch (err) {
-      console.error("Error during login:", err); // Log error
+      console.error('Error during login:', err); // Log error
       if (axios.isAxiosError(err)) {
         if (err.response) {
-          console.error("Server responded with:", err.response.data); // Log detail dari respons server
-          setServerError(err.response.data.message || "Username or password incorrect");
+          console.error('Server responded with:', err.response.data); // Log detail dari respons server
+          setServerError(
+            err.response.data.message || 'Username or password incorrect'
+          );
         } else if (err.request) {
-          setServerError("Network error. Please try again later.");
-          console.error("Network Error:", err.request);
+          setServerError('Network error. Please try again later.');
+          console.error('Network Error:', err.request);
         } else {
-          setServerError("An unexpected error occurred.");
-          console.error("Request Setup Error:", err.message);
+          setServerError('An unexpected error occurred.');
+          console.error('Request Setup Error:', err.message);
         }
       } else if (err?.errors) {
         const errors = {};
@@ -76,8 +79,8 @@ export default function App() {
         });
         setErrors(errors);
       } else {
-        setServerError("An unknown error occurred.");
-        console.error("Unhandled Error:", err);
+        setServerError('An unknown error occurred.');
+        console.error('Unhandled Error:', err);
       }
     }
   };
@@ -89,37 +92,48 @@ export default function App() {
   });
 
   return (
-    <View style={styles.container}>
-
+    <SafeAreaView style={styles.container}>
       <Image
-        source={require("../assets/janken_logo-red.png")}
+        source={require('../assets/janken_logo-red.png')}
         style={styles.logo}
         resizeMode="stretch"
       />
-        {serverError && <Text style={styles.errorSrvrMsg}>{serverError}</Text>}
-      <Text style={{ alignSelf: "align-start", color: "#CB1B45",     fontFamily: "Poppins_400Regular", }}>
-        {" "}
-        Username{" "}
+      {serverError && <Text style={styles.errorSrvrMsg}>{serverError}</Text>}
+      <Text
+        style={{
+          alignSelf: 'align-start',
+          color: '#CB1B45',
+          fontFamily: 'Poppins_400Regular',
+        }}
+      >
+        {' '}
+        Username{' '}
       </Text>
 
       <TextInput
         style={styles.input}
-        onChangeText={(text) => handleInputChange("username", text)}
+        onChangeText={(text) => handleInputChange('username', text)}
       />
 
       {errorMsg.username ? (
         <Text style={styles.errorMsg}>{errorMsg.username}</Text>
       ) : null}
 
-      <Text style={{ alignSelf: "align-start", color: "#CB1B45", fontFamily: "Poppins_400Regular" }}>
-        {" "}
-        Password{" "}
+      <Text
+        style={{
+          alignSelf: 'align-start',
+          color: '#CB1B45',
+          fontFamily: 'Poppins_400Regular',
+        }}
+      >
+        {' '}
+        Password{' '}
       </Text>
 
       <TextInput
         style={styles.input}
         secureTextEntry={true}
-        onChangeText={(text) => handleInputChange("password", text)}
+        onChangeText={(text) => handleInputChange('password', text)}
       />
 
       {errorMsg.password ? (
@@ -127,15 +141,19 @@ export default function App() {
       ) : null}
 
       <Button onPress={handleSubmit} text="Login" />
-      <Text style={{ alignSelf: "center", padding: 7, color: "#CB1B45", fontFamily: "Poppins_400Regular" }}>
-        Don't have an account? {""}
+      <Text
+        style={{
+          alignSelf: 'center',
+          padding: 7,
+          color: '#CB1B45',
+          fontFamily: 'Poppins_400Regular',
+        }}
+      >
+        Don't have an account? {''}
       </Text>
       <Link href="/register" style={styles.rgs}>
         Click here!
       </Link>
-
-
-
 
       {/* <Link href="/win" style={styles.linkText}>
         Win page
@@ -155,16 +173,16 @@ export default function App() {
         User Pick
       </Link> */}
       <StatusBar style="auto" hidden />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#F5F5F5',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 20,
   },
   logo: {
@@ -175,56 +193,56 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   input: {
-    width: "100%",
+    width: '100%',
     height: 50,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 15,
     paddingHorizontal: 10,
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
     fontSize: 16,
   },
   inputpw: {
-    width: "100%",
+    width: '100%',
     height: 50,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 15,
     paddingHorizontal: 10,
     marginTop: 10,
     marginBottom: 20,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
     fontSize: 16,
   },
   rgs: {
     marginTop: -5,
-    color: "#CB1B45",
-    fontFamily: "Poppins_700Bold_Italic",
-    textDecorationLine: "underline",
+    color: '#CB1B45',
+    fontFamily: 'Poppins_700Bold_Italic',
+    textDecorationLine: 'underline',
   },
   errorSrvrMsg: {
     marginBottom: 20,
     marginTop: -10,
-    color: "#CB1B45",
-    fontFamily: "Poppins_400Regular_Italic",
+    color: '#CB1B45',
+    fontFamily: 'Poppins_400Regular_Italic',
   },
   blmrgs: {
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
   },
   text: {
-    color: "white",
+    color: 'white',
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   errorMsg: {
-    color: "red",
-    width: "100%",
-    fontFamily: "Poppins_400Regular",
+    color: 'red',
+    width: '100%',
+    fontFamily: 'Poppins_400Regular',
   },
 });

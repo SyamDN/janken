@@ -7,17 +7,19 @@ import {
   Image,
   Platform,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import JankenChoices from '../components/JankenChoice';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import {  
+import {
   Poppins_400Regular,
+  Poppins_700Bold,
   Poppins_700Bold_Italic,
   Poppins_400Regular_Italic,
-} from "@expo-google-fonts/poppins";
-import { useFonts } from "expo-font";
+} from '@expo-google-fonts/poppins';
+import { useFonts } from 'expo-font';
 
 export default function UserPick() {
   const [score, setScore] = useState(0);
@@ -187,14 +189,14 @@ export default function UserPick() {
     }
   };
 
-      const [fontsLoaded] = useFonts({
-        Poppins_400Regular,
-        Poppins_700Bold_Italic,
-        Poppins_400Regular_Italic,
-      });
-    
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_700Bold_Italic,
+    Poppins_400Regular_Italic,
+  });
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Score Section */}
       <View style={styles.header}>
         <View style={styles.scoreContainer}>
@@ -242,8 +244,7 @@ export default function UserPick() {
 
       {/* Janken Choices */}
       <JankenChoices onChoiceSelect={handleChoice} disabled={isLoading} />
-
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 24,
     fontWeight: 'bold',
-    fontFamily: "Poppins_400Regular",
+    fontFamily: 'Poppins_400Regular',
   },
 
   scoreBox: {
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
   scoreNumber: {
     fontSize: 24,
     fontWeight: 'bold',
-    color : '#CB1B45'
+    color: '#CB1B45',
   },
   gameArea: {
     flexDirection: 'row',
@@ -327,7 +328,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFF',
     marginBottom: 10,
-    fontFamily: "Poppins_400Regular",
+    fontFamily: 'Poppins_400Regular',
   },
   vsText: {
     color: '#FFF',
@@ -336,7 +337,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    fontFamily: "Poppins_400Regular",
+    fontFamily: 'Poppins_700Bold',
   },
   choiceImage: {
     width: 70, // Sesuaikan dengan ukuran lingkaran
