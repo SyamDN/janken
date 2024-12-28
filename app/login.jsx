@@ -116,15 +116,11 @@ export default function App() {
       <Button onPress={handleSubmit} text="Login" />
       <Text style={{ alignSelf: "center", padding: 7, color: "#CB1B45" }}>
         Don't have an account? {""}
+
+      </Text>
       <Link href="/register" style={styles.rgs}>
         Click here!
       </Link>
-
-      <Link href="/draw" style={styles.linkText}>
-        Draw page
-      </Link>
-      </Text>
-
 
 
       {/* <Link href="/win" style={styles.linkText}>

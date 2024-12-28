@@ -82,14 +82,14 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
             >
               {/* SVG content remains the same, but use isToggled1 for color */}
               <g filter="url(#a)">
-                <rect
+                <Rect
                   width={97.676}
                   height={97.676}
                   x={2}
                   fill={isToggled1 ? '#FFC408' : '#F5F5F5'}
                   rx={48.838}
                 />
-                <rect
+                <Rect
                   width={94.676}
                   height={94.676}
                   x={3.5}
@@ -181,14 +181,14 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
             >
               {/* SVG content remains the same, but use isToggled2 for color */}
               <g filter="url(#a)">
-                <rect
+                <Rect
                   width={97.676}
                   height={97.676}
                   x={2}
                   fill={isToggled2 ? '#1E88A8' : '#F5F5F5'}
                   rx={48.838}
                 />
-                <rect
+                <Rect
                   width={94.676}
                   height={94.676}
                   x={3.5}
@@ -279,14 +279,14 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
               fill="none"
             >
               <g filter="url(#a)">
-                <rect
+                <Rect
                   width={97.676}
                   height={97.676}
                   x={2}
                   fill={isToggled3 ? '#CB1B45' : '#F5F5F5'}
                   rx={48.838}
                 />
-                <rect
+                <Rect
                   width={94.676}
                   height={94.676}
                   x={3.5}
