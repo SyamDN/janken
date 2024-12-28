@@ -154,9 +154,9 @@ export default function UserPick() {
 
       setIsLoading(false);
 
-      console.log('Result:', gameResult.result);
-      console.log('User Choice:', gameResult.userChoice);
-      console.log('Computer Choice:', gameResult.computerChoice);
+      // console.log('Result:', gameResult.result);
+      // console.log('User Choice:', gameResult.userChoice);
+      // console.log('Computer Choice:', gameResult.computerChoice);
 
       // Delay sebelum redirect untuk memastikan pilihan komputer ditampilkan
       await new Promise((resolve) => setTimeout(resolve, 3000)); // Delay 2 detik
