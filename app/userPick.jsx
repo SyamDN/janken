@@ -32,6 +32,13 @@ export default function UserPick() {
         // 1. Ambil token dari AsyncStorage
         const token = await AsyncStorage.getItem('token');
 
+        // Coba ambil session_streak dari AsyncStorage
+        const savedSessionStreak = await AsyncStorage.getItem('sessionStreak');
+
+        if (savedSessionStreak) {
+          setScore(parseInt(savedSessionStreak, 10));
+        }
+
         if (!token) {
           console.error('No token found');
           return;
@@ -72,21 +79,21 @@ export default function UserPick() {
       case 'rock':
         return (
           <Image
-            source={require('../assets/ButtonRockChoosed.svg')}
+            source={require('../assets/RockPress.png')}
             style={{ width: 110, height: 110 }}
           />
         );
       case 'scissors':
         return (
           <Image
-            source={require('../assets/ButtonScissorChoosed.svg')}
+            source={require('../assets/ScissorPress.png')}
             style={{ width: 110, height: 110 }}
           />
         );
       case 'paper':
         return (
           <Image
-            source={require('../assets/ButtonPaperChoosed.svg')}
+            source={require('../assets/PaperPress.png')}
             style={{ width: 110, height: 110 }}
           />
         );
@@ -136,6 +143,13 @@ export default function UserPick() {
       // Handle the response
       const gameResult = response.data.data;
 
+      // Update dan simpan session_streak
+      const newSessionStreak = gameResult.gameSession.session_streak;
+      setScore(parseInt(newSessionStreak, 10));
+
+      // Simpan ke AsyncStorage
+      await AsyncStorage.setItem('sessionStreak', newSessionStreak.toString());
+
       setComputerChoice(gameResult.computerChoice);
 
       setIsLoading(false);
@@ -174,7 +188,7 @@ export default function UserPick() {
         <View style={styles.scoreContainer}>
           <Text style={styles.scoreText}>Score</Text>
           <View style={styles.scoreBox}>
-            <Text style={styles.scoreNumber}>{currentUser.score}</Text>
+            <Text style={styles.scoreNumber}>{score}</Text>
           </View>
         </View>
         <Image
@@ -216,7 +230,7 @@ export default function UserPick() {
 
       {/* Janken Choices */}
       <JankenChoices onChoiceSelect={handleChoice} disabled={isLoading} />
-      
+
     </View>
   );
 }
@@ -270,6 +284,7 @@ const styles = StyleSheet.create({
   scoreNumber: {
     fontSize: 24,
     fontWeight: 'bold',
+    color : '#CB1B45'
   },
   gameArea: {
     flexDirection: 'row',

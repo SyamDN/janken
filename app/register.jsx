@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { router } from "expo-router";
+import { router, Link } from "expo-router";
 import {
     View,
     Text,
@@ -28,7 +28,7 @@ export default function Register() {
         email: z.string().email({ message: "Invalid email address" }),
         password: z
             .string()
-            .min(3, { message: "Must be 3 or more characters long" }),
+            .min(6, { message: "Must be 6 or more characters long" }),
     });
 
     const handleInputChange = (key, value) => {
@@ -135,6 +135,12 @@ export default function Register() {
                 {/* <Button onPress={handleRegister} text="Register" /> */}
                 <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
+            <Text style={{ alignSelf: "center", padding: 7, color: "#CB1B45" }}>
+                Have an account? {""}
+            </Text>
+            <Link href="/login" style={styles.rgs}>
+                Click here!
+            </Link>
         </View>
     );
 };
@@ -201,4 +207,15 @@ const styles = StyleSheet.create({
         fontSize: 24,
         weight: 20,
     },
+    rgs: {
+        marginTop: -5,
+        color: "#CB1B45",
+        fontStyle: "italic", // Italic text
+        fontWeight: "bold", // Bold text
+        textDecorationLine: "underline",
+      },
+      errorMsg: {
+        color: "red",
+        width: "100%",
+      },
 });

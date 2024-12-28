@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,9 +6,9 @@ import {
   Modal,
   TouchableOpacity,
   Image,
-} from 'react-native';
-import { useRouter } from 'expo-router'; // Gunakan useRouter untuk navigasi
-import AsyncStorage from '@react-native-async-storage/async-storage';
+} from "react-native";
+import { useRouter } from "expo-router"; // Gunakan useRouter untuk navigasi
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const GameResultPopup = ({ isVisible, onPlayAgain, onBackToHome }) => {
   return (
@@ -16,7 +16,7 @@ const GameResultPopup = ({ isVisible, onPlayAgain, onBackToHome }) => {
       <View style={styles.overlay}>
         <View style={styles.popupContainer}>
           <Image
-            source={require('../assets/lose.png')} // Ganti dengan gambar lose
+            source={require("../assets/lose.png")} // Ganti dengan gambar lose
             style={styles.image}
           />
 
@@ -45,40 +45,45 @@ export default function App() {
 
   const handlePlayAgain = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem("token");
 
       if (!token) {
-        console.error('No token found');
-        router.replace('/login');
+        console.error("No token found");
+        router.replace("/login");
         return;
       }
 
-      router.replace('/userPick');
+      router.replace("/userPick");
     } catch (error) {
-      console.error('Error in play again:', error);
-      router.replace('/login');
+      console.error("Error in play again:", error);
+      router.replace("/login");
     }
   };
 
   const handleBackToHome = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem("token");
 
       if (!token) {
-        console.error('No token found');
-        router.replace('/login');
+        console.error("No token found");
+        router.replace("/login");
         return;
       }
 
-      router.replace('/home');
+      router.replace("/home");
     } catch (error) {
-      console.error('Error in back to home:', error);
-      router.replace('/login');
+      console.error("Error in back to home:", error);
+      router.replace("/login");
     }
   };
 
   return (
     <View style={styles.container}>
+            <Image
+              source={require("../assets/janken_logo-white.png")}
+              style={styles.logo}
+              resizeMode="stretch"
+            />
       <GameResultPopup
         isVisible={isModalVisible}
         onPlayAgain={handlePlayAgain}
@@ -93,26 +98,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#f8d5d5',
+    backgroundColor: "#CB1B45",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   overlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
   popupContainer: {
     width: 280,
     height: 260,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 30,
-    alignItems: 'center',
+    alignItems: "center",
     elevation: 5,
   },
   image: {
@@ -121,27 +126,33 @@ const styles = StyleSheet.create({
     height: 100,
     marginBottom: 15,
   },
+  logo: {
+    width: 200,
+    height: 100,
+    marginTop: -90,
+    marginBottom: 350,
+  },
   playAgainButton: {
-    backgroundColor: '#CB1B45',
+    backgroundColor: "#CB1B45",
     padding: 10,
     borderRadius: 15,
-    width: '80%',
-    alignItems: 'center',
+    width: "80%",
+    alignItems: "center",
     marginBottom: 10,
   },
   playAgainText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   backHomeButton: {
-    backgroundColor: '#FFC408',
+    backgroundColor: "#FFC408",
     padding: 10,
     borderRadius: 15,
-    width: '80%',
-    alignItems: 'center',
+    width: "80%",
+    alignItems: "center",
   },
   backHomeText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
 });

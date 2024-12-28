@@ -1,14 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Dimensions,
-} from 'react-native';
-import Svg, { Defs, Path, Rect } from 'react-native-svg';
+  Image,
+} from "react-native";
+import Svg, {
+  Defs,
+  Path,
+  Rect,
+  G,
+  Use,
+  Mask,
+  FeFlood,
+  FeColorMatrix,
+  FeOffset,
+  FeGaussianBlur,
+  FeComposite,
+  FeBlend,
+  Filter,
+} from "react-native-svg";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 const CIRCLE_RADIUS = width * 0.5;
 const BUTTON_SIZE = 110;
 const BUTTON_RADIUS = BUTTON_SIZE / 2;
@@ -27,13 +42,13 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
 
     // Set toggle sesuai pilihan
     switch (choice) {
-      case 'rock':
+      case "rock":
         setIsToggled1(true);
         break;
-      case 'scissors':
+      case "scissors":
         setIsToggled2(true);
         break;
-      case 'paper':
+      case "paper":
         setIsToggled3(true);
         break;
     }
@@ -58,7 +73,7 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
         />
       </Svg>
       <View style={styles.contentContainer}>
-        <Text style={styles.title}>Choose Your{'\n'}Janken</Text>
+        <Text style={styles.title}>Choose Your{"\n"}Janken</Text>
         <View style={styles.choices}>
           {/* Rock (Left) */}
           <TouchableOpacity
@@ -68,25 +83,33 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
               disabled && styles.disabledChoice,
             ]}
             onPress={() => [
-              handleChoiceSelect('rock'),
+              handleChoiceSelect("rock"),
               setIsToggled1(!isToggled1),
             ]}
             disabled={disabled}
           >
+            <Image
+              source={
+                isToggled1
+                  ? require("../assets/RockPress.png")
+                  : require("../assets/Rock.png")
+              }
+              style={{ width: 97, height: 97, resizeMode: "contain" }}
+            />
+
             {/* Existing SVG content */}
-            <svg
+            {/* <Svg
               xmlns="http://www.w3.org/2000/svg"
               width={101}
               height={100}
               fill="none"
             >
-              {/* SVG content remains the same, but use isToggled1 for color */}
-              <g filter="url(#a)">
+              <G filter="url(#a)">
                 <Rect
                   width={97.676}
                   height={97.676}
                   x={2}
-                  fill={isToggled1 ? '#FFC408' : '#F5F5F5'}
+                  fill={isToggled1 ? "#FFC408" : "#F5F5F5"}
                   rx={48.838}
                 />
                 <Rect
@@ -98,8 +121,8 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
                   strokeWidth={3}
                   rx={47.338}
                 />
-              </g>
-              <mask
+              </G>
+              <Mask
                 id="b"
                 width={79}
                 height={77}
@@ -107,26 +130,26 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
                 y={10}
                 maskUnits="userSpaceOnUse"
                 style={{
-                  maskType: 'alpha',
+                  maskType: "alpha",
                 }}
               >
-                <path
+                <Path
                   fill="#F5F5F5"
                   stroke="#000"
                   strokeWidth={1.912}
                   d="m28.101 83.06 50.727 2.613 13.684-31.02-7.348-20.04-12.08-22.65-25.164 2.523L25.18 22.48l-8.571 9.44.783 16.236 5.175 25.051L28.1 83.06Z"
                 />
-              </mask>
-              <g mask="url(#b)">
-                <path
-                  fill={isToggled1 ? '#F5F5F5' : '#FFC408'}
+              </Mask>
+              <G Mask="url(#b)">
+                <Path
+                  fill={isToggled1 ? "#F5F5F5" : "#FFC408"}
                   fillRule="evenodd"
                   d="M27.038 66.677c3.735-3.864 4.472-6.52 4.078-14.692-.436-9.028.133-10.57 5.985-16.228 7.057-6.828 12.226-8.718 8.16-2.986-1.352 1.908-3.171 4.041-4.04 4.742-.867.7-.516 1.86.784 2.58 1.432.792 5.357-1.937 9.992-6.945 7.148-7.726 12.165-10.53 12.34-6.896.042.867-1.986 3.71-4.506 6.317-3.056 3.161-3.916 5.349-2.58 6.562 1.333 1.21 3.415.354 6.245-2.574 4.282-4.43 8.71-5.948 8.851-3.033.042.867-1.986 3.71-4.507 6.317-3.056 3.161-3.916 5.35-2.58 6.562 1.334 1.21 3.415.354 6.246-2.574 4.282-4.43 8.71-5.948 8.85-3.033.042.867-1.986 3.71-4.506 6.318-5.566 5.76-2.75 10.464 2.894 4.836 6.38-6.358 6.907.243.594 7.417-8.061 9.162-4.993 13.27 3.301 4.419 6.142-6.557 8.016-15.767 3.694-18.159-1.082-.598-2.03-2.4-2.108-4.007-.146-3.043-21.06-22.637-24.009-22.495-.928.045-2.916 1.433-4.415 3.085-1.5 1.652-5.62 3.143-9.151 3.314-5.045.243-8.068 2.152-14.07 8.888-6.983 7.839-7.601 9.427-7.167 18.422.26 5.414-.36 10.416-1.379 11.116-1.019.7-1.786 2.661-1.704 4.358.119 2.467 1.063 2.14 4.708-1.631Zm-7.611-98.236c1.082.598 2.101 3.877 2.266 7.287.22 4.57 2.128 7.808 7.267 12.328 8.23 7.242 11.936 5.683 4.114-1.73-3.493-3.31-5.473-7.188-5.66-11.089-.177-3.656-2.233-8-5.263-11.128-4.753-4.904-4.968-4.948-4.832-.945.076 2.304 1.026 4.678 2.108 5.277ZM35.93-54.9c3.861 3.293 7.304 3.927 20.411 3.764 16.778-.21 22.528 2.9 8.481 4.586l-8.396 1.01 15.718 14.356C85.118-19.333 87.286-16.57 84.558-15.37c-2.386 1.051-5.942-.9-12.775-7.012-5.209-4.656-10.058-7.819-10.778-7.026-.72.793 4.767 7.002 12.194 13.797C83.843-5.872 86.229-2.74 84.476-.81c-1.753 1.93-5.134-.171-15.969-9.932C60.95-17.552 54.308-22.3 53.75-21.291c-.557 1.007 3.898 6.236 9.9 11.62C74.326-.102 77.263 4.9 72.348 5.136 71 5.203 65.04.792 59.105-4.666c-5.936-5.456-11.562-9.393-12.503-8.746-.942.647 2.165 4.76 6.903 9.144 6.72 6.219 8.13 8.5 6.42 10.382-1.71 1.884-3.94.864-10.153-4.643-10.389-9.208-12.892-6.445-2.725 3.007 7.403 6.884 15.08 9.121 17.33 5.053.543-.98 2.783-1.403 4.98-.94 3.55.747 7.124-.532 16.814-6.01 1.538-.869 2.709-4.058 2.605-7.084-.106-3.025.412-7.57 1.15-10.1 1.155-3.965-.406-6.196-11.332-16.206-9.897-9.067-11.827-11.65-8.811-11.796 7.719-.372 10.458-7.45 4.851-12.543-2.35-2.134-7.122-2.664-18.864-2.098-8.993.434-16.672-.107-17.948-1.263-1.223-1.112-3.196-1.647-4.382-1.188-1.29.5-.287 2.43 2.49 4.799Zm6.957 141.872c1.696-.082 3.575-1.034 4.173-2.116.6-1.082 4.812-2.146 9.36-2.366 9.467-.457 18.52-6.737 14.747-10.229-1.606-1.485-2.806-1.209-4.494 1.038-1.407 1.872-5.428 3.215-10.331 3.451-6.096.294-9.054 1.59-12.285 5.38-3.403 3.99-3.638 4.961-1.17 4.842ZM41.101-15.475a2.134 2.134 0 0 0 2.893-.832 2.134 2.134 0 0 0-.833-2.894 2.134 2.134 0 0 0-2.893.833 2.134 2.134 0 0 0 .833 2.893ZM52.97 46.28c1.638-.08 2.406-.978 1.706-1.997-.7-1.02-2.08-1.815-3.07-1.767-.99.048-1.756.946-1.706 1.997.051 1.05 1.434 1.846 3.07 1.767Zm-4.598-69.764a2.134 2.134 0 0 0 2.893-.833 2.134 2.134 0 0 0-.833-2.893 2.134 2.134 0 0 0-2.893.833 2.134 2.134 0 0 0 .833 2.893Zm12.608 77.036c1.637-.08 2.405-.978 1.705-1.997-.7-1.02-2.08-1.815-3.07-1.767-.99.048-1.756.947-1.705 1.997.05 1.05 1.433 1.846 3.07 1.767Zm-5.336-85.046a2.134 2.134 0 0 0 2.893-.832 2.134 2.134 0 0 0-.832-2.893 2.134 2.134 0 0 0-2.894.833 2.134 2.134 0 0 0 .833 2.893ZM68.99 60.825c1.637-.08 2.406-.978 1.706-1.997-.7-1.02-2.08-1.814-3.07-1.767-.99.048-1.756.947-1.706 1.997.05 1.05 1.433 1.846 3.07 1.767ZM89.347 42.13c1.411 3.063 10.44 2.486 24.504-1.565 7.036-2.028 12.051-2.62 13.231-1.567 2.548 2.276 14.533 1.595 14.416-.82-.05-1.05-2.579-1.79-5.618-1.643-3.278.158-6.057-.94-6.831-2.7-2.076-4.717-2.211-17.925-.184-18.023 2.487-.12 6.109 6.194 6.344 11.056.237 4.917 1.157 4.893 5.736-.15 2-2.203 4.926-4.068 6.502-4.144 1.576-.076 2.819-1.095 2.762-2.264-.061-1.272-2.363-1.684-5.72-1.024-6.2 1.218-9.409-2.462-6.044-6.936 1.077-1.436 1.723-4.158 1.435-6.049-1.56-10.198-.679-12.048 5.888-12.365 3.964-.191 7.772 1.078 10.032 3.345 3.718 3.73 10.759 4.748 10.604 1.532-.047-.98-1.717-2.213-3.709-2.741-1.993-.528-5.24-2.585-7.218-4.569-2.92-2.928-6.079-3.486-16.797-2.969-17.377.838-20.385 2.741-19.536 12.36.366 4.14.287 7.939-.173 8.442-.462.5-6.718-.115-13.903-1.369-14.034-2.45-18.681-.917-18.345 6.05.228 4.733 3.582 6.623 15.745 8.878l10.626 1.97-11.252 3.143c-13.154 3.675-15.885 6.761-12.495 14.122Zm17.641-11.035c6.598-1.75 13.071-3.267 14.381-3.366 3.644-.28 3.095 5.14-.648 6.405-9.917 3.348-25.285 6.355-27.167 5.314-3.806-2.106.878-5.018 13.434-8.353Zm1.632-18.317c11.777 1.814 14.561 2.905 14.699 5.766.119 2.45-.865 3.287-3.218 2.738-1.863-.435-8.595-1.555-14.959-2.491-13.887-2.041-15.251-2.657-12.878-5.814 1.437-1.915 4.937-1.955 16.356-.2Zm20.76-7.52c2.976-.145 5.822.794 6.323 2.087.619 1.594-1.339 2.458-6.093 2.688-4.754.229-6.786-.443-6.323-2.089.374-1.335 3.117-2.543 6.093-2.687Zm-.349-10.515c4.627-.223 6.626.456 6.165 2.096-1.277 4.561-12.695 4.74-12.914.204-.052-1.083 2.984-2.118 6.749-2.3Zm21.778 44.9c1.918-.092 5.402-2.414 7.743-5.16 2.341-2.745 5.395-5.046 6.787-5.113 1.393-.067 2.471-1.412 2.395-2.988-.221-4.578-4.73-3.11-10.368 3.372-2.868 3.298-6.342 6.05-7.721 6.117-1.379.066-2.467.98-2.416 2.031.051 1.05 1.662 1.834 3.58 1.742Z"
                   clipRule="evenodd"
                 />
-              </g>
-              <defs>
-                <filter
+              </G>
+              <Defs>
+                <Filter
                   id="a"
                   width={99.799}
                   height={99.799}
@@ -135,28 +158,28 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
                   colorInterpolationFilters="sRGB"
                   filterUnits="userSpaceOnUse"
                 >
-                  <feFlood floodOpacity={0} result="BackgroundImageFix" />
-                  <feColorMatrix
+                  <FeFlood floodOpacity={0} result="BackgroundImageFix" />
+                  <FeColorMatrix
                     in="SourceAlpha"
                     result="hardAlpha"
                     values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
                   />
-                  <feOffset dy={1.062} />
-                  <feGaussianBlur stdDeviation={0.531} />
-                  <feComposite in2="hardAlpha" operator="out" />
-                  <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-                  <feBlend
+                  <FeOffset dy={1.062} />
+                  <FeGaussianBlur stdDeviation={0.531} />
+                  <FeComposite in2="hardAlpha" operator="out" />
+                  <FeColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                  <FeBlend
                     in2="BackgroundImageFix"
                     result="effect1_dropShadow_81_471"
                   />
-                  <feBlend
+                  <FeBlend
                     in="SourceGraphic"
                     in2="effect1_dropShadow_81_471"
                     result="shape"
                   />
-                </filter>
-              </defs>
-            </svg>
+                </Filter>
+              </Defs>
+            </Svg> */}
           </TouchableOpacity>
 
           {/* Scissors (Top) */}
@@ -167,28 +190,36 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
               disabled && styles.disabledChoice,
             ]}
             onPress={() => [
-              handleChoiceSelect('scissors'),
+              handleChoiceSelect("scissors"),
               setIsToggled2(!isToggled2),
             ]}
             disabled={disabled}
           >
+            <Image
+              source={
+                isToggled2
+                  ? require("../assets/ScissorPress.png")
+                  : require("../assets/Scissors.png")
+              }
+              style={{ width: 97, height: 97, resizeMode: "contain" }}
+            />
             {/* Existing SVG content */}
-            <svg
+            {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               width={101}
               height={100}
               fill="none"
             >
-              {/* SVG content remains the same, but use isToggled2 for color */}
-              <g filter="url(#a)">
-                <Rect
+              
+              <G filter="url(#a)">
+                <rect
                   width={97.676}
                   height={97.676}
                   x={2}
                   fill={isToggled2 ? '#1E88A8' : '#F5F5F5'}
                   rx={48.838}
                 />
-                <Rect
+                <rect
                   width={94.676}
                   height={94.676}
                   x={3.5}
@@ -209,7 +240,7 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
                   maskType: 'alpha',
                 }}
               >
-                <path
+                <Path
                   fill="#1E88A8"
                   stroke="#000"
                   strokeWidth={1.702}
@@ -255,7 +286,7 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
                   />
                 </filter>
               </defs>
-            </svg>
+            </svg> */}
           </TouchableOpacity>
 
           {/* Paper (Right) */}
@@ -266,27 +297,35 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
               disabled && styles.disabledChoice,
             ]}
             onPress={() => [
-              handleChoiceSelect('paper'),
+              handleChoiceSelect("paper"),
               setIsToggled3(!isToggled3),
             ]}
             disabled={disabled}
           >
+            <Image
+              source={
+                isToggled3
+                  ? require("../assets/PaperPress.png")
+                  : require("../assets/Paper.png")
+              }
+              style={{ width: 97, height: 97, resizeMode: "contain" }}
+            />
             {/* Existing SVG content */}
-            <svg
+            {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               width={101}
               height={100}
               fill="none"
             >
               <g filter="url(#a)">
-                <Rect
+                <rect
                   width={97.676}
                   height={97.676}
                   x={2}
                   fill={isToggled3 ? '#CB1B45' : '#F5F5F5'}
                   rx={48.838}
                 />
-                <Rect
+                <rect
                   width={94.676}
                   height={94.676}
                   x={3.5}
@@ -353,7 +392,7 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
                   />
                 </filter>
               </defs>
-            </svg>
+            </svg> */}
           </TouchableOpacity>
         </View>
       </View>
@@ -363,65 +402,65 @@ export default function JankenChoices({ onChoiceSelect, disabled = false }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative', // Allow absolute-positioned elements to anchor here
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative", // Allow absolute-positioned elements to anchor here
     height: CIRCLE_RADIUS, // Adjust height to fit content
   },
   contentContainer: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
+    width: "100%",
+    height: "100%",
+    position: "absolute",
   },
   arc: {
     width: CIRCLE_RADIUS * 2,
     height: CIRCLE_RADIUS * 2,
-    position: 'absolute',
+    position: "absolute",
     bottom: -CIRCLE_RADIUS * 0.8, // Adjust based on reduced container height
     zIndex: 0,
   },
   title: {
     fontSize: 14,
-    color: '#FFF',
-    textAlign: 'center',
-    position: 'absolute',
+    color: "#FFF",
+    textAlign: "center",
+    position: "absolute",
     top: CIRCLE_RADIUS * 0.7, // Adjust position
-    width: '100%',
+    width: "100%",
     zIndex: 1,
   },
   choices: {
-    width: '100%',
-    height: '100%',
-    position: 'relative', // Anchor absolute-positioned buttons here
+    width: "100%",
+    height: "100%",
+    position: "relative", // Anchor absolute-positioned buttons here
     zIndex: 2,
   },
   choiceButton: {
-    position: 'absolute',
+    position: "absolute",
     width: BUTTON_SIZE,
     height: BUTTON_SIZE,
     borderRadius: BUTTON_RADIUS,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     // backgroundColor: '#FFF',
 
     zIndex: 3,
   },
   rock: {
-    borderColor: '#FFCC00',
-    left: '5%', // Use percentages for relative positioning
-    top: '40%',
+    borderColor: "#FFCC00",
+    left: "5%", // Use percentages for relative positioning
+    top: "40%",
   },
   scissors: {
-    borderColor: '#00CCCC',
-    top: '1%',
-    left: '50%',
+    borderColor: "#00CCCC",
+    top: "1%",
+    left: "50%",
     transform: [{ translateX: -BUTTON_RADIUS }], // Center horizontally
   },
   paper: {
-    borderColor: '#FF3366',
-    right: '5%', // Use percentages
-    top: '40%',
+    borderColor: "#FF3366",
+    right: "5%", // Use percentages
+    top: "40%",
   },
   choiceText: {
     fontSize: 30,
