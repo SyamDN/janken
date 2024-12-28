@@ -84,7 +84,7 @@ export default function App() {
         style={styles.logo}
         resizeMode="stretch"
       />
-        {serverError && <Text style={styles.errorSrvrMsg}>{serverError}</Text>}
+      {serverError && <Text style={styles.errorSrvrMsg}>{serverError}</Text>}
       <Text style={{ alignSelf: "align-start", color: "#CB1B45" }}>
         {" "}
         Username{" "}
@@ -117,11 +117,15 @@ export default function App() {
       <Button onPress={handleSubmit} text="Login" />
       <Text style={{ alignSelf: "center", padding: 7, color: "#CB1B45" }}>
         Don't have an account? {""}
+
+
+        {/* <Link href="/draw" style={styles.linkText}>
+        Draw page
+      </Link> */}
       </Text>
       <Link href="/register" style={styles.rgs}>
         Click here!
       </Link>
-
 
 
       {/* <Link href="/win" style={styles.linkText}>
